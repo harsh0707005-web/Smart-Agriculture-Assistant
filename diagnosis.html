@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="https://public-frontend-cos.metadl.com/mgx/img/favicon.png" type="image/png">
+    <title>Crop Diagnosis - Smart Agriculture Assistant</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+    <!-- Language Toggle -->
+    <div class="language-toggle">
+        <button id="langToggle" onclick="toggleLanguage()">
+            <span id="langText">ಕನ್ನಡ</span>
+        </button>
+    </div>
+
+    <!-- Navigation Header -->
+    <nav class="nav-header">
+        <div class="container">
+            <div class="nav-content">
+                <h1 class="nav-title" id="pageTitle">🔬 Crop Diagnosis</h1>
+                <button class="back-btn" onclick="goBack()" id="backBtn">← Back</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="page-content">
+        <div class="container">
+            <!-- Upload Section -->
+            <section class="upload-section">
+                <div class="upload-card">
+                    <h2 id="uploadTitle">Upload Crop Image for Analysis</h2>
+                    <p id="uploadDesc">Take a clear photo of the affected plant or upload an existing image for AI-powered diagnosis.</p>
+                    
+                    <div class="upload-area" id="uploadArea">
+                        <div class="upload-icon">📸</div>
+                        <p id="uploadText">Click to upload or drag and drop image</p>
+                        <input type="file" id="imageInput" accept="image/*" style="display: none;">
+                        <button class="upload-btn" id="uploadBtn" onclick="document.getElementById('imageInput').click()">
+                            Choose Image
+                        </button>
+                    </div>
+                    
+                    <div class="image-preview" id="imagePreview" style="display: none;">
+                        <img id="previewImg" alt="Uploaded crop image">
+                        <button class="analyze-btn" id="analyzeBtn" onclick="analyzeCrop()">
+                            🔍 Analyze Crop
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Results Section -->
+            <section class="results-section" id="resultsSection" style="display: none;">
+                <div class="results-card">
+                    <h2 id="resultsTitle">Diagnosis Results</h2>
+                    <div id="diagnosisResults"></div>
+                </div>
+            </section>
+
+            <!-- Quick Tips -->
+            <section class="tips-section">
+                <h2 id="tipsTitle">Photography Tips for Better Diagnosis</h2>
+                <div class="tips-grid">
+                    <div class="tip-card">
+                        <div class="tip-icon">💡</div>
+                        <h3 id="tip1Title">Good Lighting</h3>
+                        <p id="tip1Desc">Take photos in natural daylight for best results. Avoid shadows and artificial lighting.</p>
+                    </div>
+                    <div class="tip-card">
+                        <div class="tip-icon">🎯</div>
+                        <h3 id="tip2Title">Focus on Problem</h3>
+                        <p id="tip2Desc">Capture the affected area clearly. Include both healthy and diseased parts for comparison.</p>
+                    </div>
+                    <div class="tip-card">
+                        <div class="tip-icon">📏</div>
+                        <h3 id="tip3Title">Proper Distance</h3>
+                        <p id="tip3Desc">Maintain 6-12 inches distance from the plant. Ensure the image is not blurry.</p>
+                    </div>
+                    <div class="tip-card">
+                        <div class="tip-icon">🌿</div>
+                        <h3 id="tip4Title">Multiple Angles</h3>
+                        <p id="tip4Desc">Take photos from different angles - top, side, and close-up of affected areas.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Common Issues -->
+            <section class="common-issues">
+                <h2 id="commonTitle">Common Crop Issues in Karnataka</h2>
+                <div class="issues-grid">
+                    <div class="issue-card">
+                        <h3>🍅 Tomato Early Blight</h3>
+                        <p><strong>Symptoms:</strong> Dark spots with concentric rings on leaves</p>
+                        <p><strong>Treatment:</strong> Copper-based fungicides, proper spacing</p>
+                    </div>
+                    <div class="issue-card">
+                        <h3>🌾 Rice Blast</h3>
+                        <p><strong>Symptoms:</strong> Diamond-shaped lesions on leaves</p>
+                        <p><strong>Treatment:</strong> Resistant varieties, balanced fertilization</p>
+                    </div>
+                    <div class="issue-card">
+                        <h3>🌽 Corn Borer</h3>
+                        <p><strong>Symptoms:</strong> Holes in leaves and stems</p>
+                        <p><strong>Treatment:</strong> Bt corn, biological control agents</p>
+                    </div>
+                    <div class="issue-card">
+                        <h3>🥔 Potato Late Blight</h3>
+                        <p><strong>Symptoms:</strong> Water-soaked spots turning brown</p>
+                        <p><strong>Treatment:</strong> Preventive fungicide sprays</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Loading Modal -->
+    <div id="loadingModal" class="modal">
+        <div class="modal-content">
+            <div class="loading-content">
+                <div class="spinner"></div>
+                <h3 id="loadingTitle">Analyzing Your Crop...</h3>
+                <p id="loadingDesc">Our AI is examining the image and comparing it with thousands of crop diseases.</p>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .upload-section {
+            margin-bottom: 3rem;
+        }
+
+        .upload-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .upload-card h2 {
+            color: #2c5530;
+            margin-bottom: 1rem;
+        }
+
+        .upload-area {
+            border: 3px dashed #4CAF50;
+            border-radius: 15px;
+            padding: 3rem 2rem;
+            margin: 2rem 0;
+            background: #f8fff8;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .upload-area:hover {
+            border-color: #45a049;
+            background: #f0fff0;
+        }
+
+        .upload-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .upload-btn {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            margin-top: 1rem;
+            transition: background 0.3s ease;
+        }
+
+        .upload-btn:hover {
+            background: #45a049;
+        }
+
+        .image-preview {
+            margin-top: 2rem;
+        }
+
+        .image-preview img {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: 10px;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.1);
+            margin-bottom: 1rem;
+        }
+
+        .analyze-btn {
+            background: #FF9800;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .analyze-btn:hover {
+            background: #F57C00;
+        }
+
+        .results-section {
+            margin-bottom: 3rem;
+        }
+
+        .results-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .diagnosis-result {
+            background: #f8fff8;
+            border-left: 5px solid #4CAF50;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .confidence-bar {
+            background: #e0e0e0;
+            height: 10px;
+            border-radius: 5px;
+            margin: 0.5rem 0;
+            overflow: hidden;
+        }
+
+        .confidence-fill {
+            background: #4CAF50;
+            height: 100%;
+            transition: width 1s ease;
+        }
+
+        .tips-section, .common-issues {
+            margin-bottom: 3rem;
+        }
+
+        .tips-grid, .issues-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .tip-card, .issue-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .tip-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .tip-card h3, .issue-card h3 {
+            color: #2c5530;
+            margin-bottom: 1rem;
+        }
+
+        .loading-content {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #4CAF50;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .upload-area {
+                padding: 2rem 1rem;
+            }
+            
+            .tips-grid, .issues-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+    <script src="./script.js"></script>
+    <script>
+        // Diagnosis page specific functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const imageInput = document.getElementById('imageInput');
+            const previewImg = document.getElementById('previewImg');
+            const imagePreview = document.getElementById('imagePreview');
+            
+            imageInput.addEventListener('change', function() {
+                handleImageUpload(this, previewImg);
+                imagePreview.style.display = 'block';
+            });
+        });
+
+        async function analyzeCrop() {
+            const loadingModal = document.getElementById('loadingModal');
+            const resultsSection = document.getElementById('resultsSection');
+            const resultsDiv = document.getElementById('diagnosisResults');
+            
+            // Show loading modal
+            loadingModal.style.display = 'block';
+            
+            try {
+                // Simulate AI analysis
+                const diagnosis = await simulateAIDiagnosis();
+                
+                // Hide loading modal
+                loadingModal.style.display = 'none';
+                
+                // Show results
+                resultsDiv.innerHTML = `
+                    <div class="diagnosis-result">
+                        <h3>🎯 Detected Issue: ${diagnosis.disease}</h3>
+                        <div class="confidence-section">
+                            <p><strong>Confidence Level: ${diagnosis.confidence}%</strong></p>
+                            <div class="confidence-bar">
+                                <div class="confidence-fill" style="width: ${diagnosis.confidence}%"></div>
+                            </div>
+                        </div>
+                        <div class="treatment-section">
+                            <h4>💊 Recommended Treatment:</h4>
+                            <p>${diagnosis.treatment}</p>
+                        </div>
+                        <div class="prevention-section">
+                            <h4>🛡️ Prevention Tips:</h4>
+                            <p>${diagnosis.prevention}</p>
+                        </div>
+                        <div class="action-buttons">
+                            <button class="action-btn" onclick="contactExpert()">
+                                👨‍🌾 Contact Expert
+                            </button>
+                            <button class="action-btn" onclick="findNearbyStore()">
+                                🏪 Find Nearby Store
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                resultsSection.style.display = 'block';
+                resultsSection.scrollIntoView({ behavior: 'smooth' });
+                
+            } catch (error) {
+                loadingModal.style.display = 'none';
+                alert('Analysis failed. Please try again with a clearer image.');
+            }
+        }
+
+        function contactExpert() {
+            alert('Connecting you with agricultural expert...');
+        }
+
+        function findNearbyStore() {
+            alert('Finding nearby agricultural stores...');
+        }
+    </script>
+</body>
+
+</html>

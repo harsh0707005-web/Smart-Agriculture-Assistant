@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="C:\Users\DELL\Desktop\Gemini_Generated_Image_b2zp06b2zp06b2zp.png" type="image/png">
+    <title>Smart Agriculture Assistant - ಸ್ಮಾರ್ಟ್ ಕೃಷಿ ಸಹಾಯಕ - स्मार्ट कृषि सहायक - स्मार्ट शेती सहाय्यक</title>
+    <link rel="stylesheet" href="./style.css">
+    <link rel="manifest" href="./manifest.json">
+    <meta name="theme-color" content="#4CAF50">
+</head>
+
+<body>
+    <!-- Language Toggle -->
+    <div class="language-toggle">
+        <button id="langToggle" onclick="toggleLanguage()">
+            <span id="langText">हिन्दी</span>
+        </button>
+        <div class="language-info">
+            <small>EN → KN → HI → MR</small>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <h1 id="appTitle">🌱 Smart Agriculture Assistant</h1>
+                <p id="appSubtitle">Your Expert Farming Companion</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h2 id="heroTitle">Empowering Farmers with AI Technology</h2>
+                <p id="heroDescription">Get instant crop diagnosis, market prices, and government subsidy information - all in your local language!</p>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <span class="stat-number">10K+</span>
+                        <span class="stat-label" id="statFarmers">Farmers Helped</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">95%</span>
+                        <span class="stat-label" id="statAccuracy">Diagnosis Accuracy</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">24/7</span>
+                        <span class="stat-label" id="statSupport">Available</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Features -->
+    <section class="features">
+        <div class="container">
+            <h2 id="featuresTitle">Our Services</h2>
+            <div class="features-grid">
+                <!-- Crop Diagnosis -->
+                <div class="feature-card" onclick="navigateTo('diagnosis.html')">
+                    <div class="feature-icon">🔬</div>
+                    <h3 id="diagnosisTitle">Crop Diagnosis</h3>
+                    <p id="diagnosisDesc">Upload photos of your crops and get instant AI-powered disease diagnosis with treatment recommendations.</p>
+                    <div class="feature-action">
+                        <span id="diagnosisAction">Diagnose Now →</span>
+                    </div>
+                </div>
+
+                <!-- Market Prices -->
+                <div class="feature-card" onclick="navigateTo('market.html')">
+                    <div class="feature-icon">💰</div>
+                    <h3 id="marketTitle">Market Prices</h3>
+                    <p id="marketDesc">Get real-time market prices for your crops across different mandis and make informed selling decisions.</p>
+                    <div class="feature-action">
+                        <span id="marketAction">Check Prices →</span>
+                    </div>
+                </div>
+
+                <!-- Government Subsidies -->
+                <div class="feature-card" onclick="navigateTo('subsidies.html')">
+                    <div class="feature-icon">🏛️</div>
+                    <h3 id="subsidiesTitle">Government Subsidies</h3>
+                    <p id="subsidiesDesc">Discover available government schemes, subsidies, and financial assistance programs for farmers.</p>
+                    <div class="feature-action">
+                        <span id="subsidiesAction">Explore Schemes →</span>
+                    </div>
+                </div>
+
+                <!-- Weather Information -->
+                <div class="feature-card" onclick="navigateTo('weather.html')">
+                    <div class="feature-icon">🌤️</div>
+                    <h3 id="weatherTitle">Weather Forecast</h3>
+                    <p id="weatherDesc">Get accurate weather forecasts and farming advisories to plan your agricultural activities.</p>
+                    <div class="feature-action">
+                        <span id="weatherAction">View Weather →</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Actions -->
+    <section class="quick-actions">
+        <div class="container">
+            <h2 id="quickTitle">Quick Actions</h2>
+            <div class="quick-buttons">
+                <button class="quick-btn emergency" onclick="showEmergencyHelp()">
+                    <span class="btn-icon">🚨</span>
+                    <span id="emergencyBtn">Emergency Help</span>
+                </button>
+                <button class="quick-btn" onclick="navigateTo('diagnosis.html')">
+                    <span class="btn-icon">📸</span>
+                    <span id="photoBtn">Take Photo</span>
+                </button>
+                <button class="quick-btn" onclick="showExpertContact()">
+                    <span class="btn-icon">👨‍🌾</span>
+                    <span id="expertBtn">Contact Expert</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3 id="footerAbout">About Us</h3>
+                    <p id="footerDesc">Empowering farmers with technology to improve crop yields and farming decisions.</p>
+                </div>
+                <div class="footer-section">
+                    <h3 id="footerContact">Contact</h3>
+                    <p>📞 1800-123-4567</p>
+                    <p>📧 <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="bbd3ded7cbfbc8d6dac9cfdadcc9d295d8d4d6">[crop@gmail.com]</a></p>
+                </div>
+                <div class="footer-section">
+                    <h3 id="footerSupport">Support</h3>
+                    <p id="footerHours">Available 24/7</p>
+                    <p id="footerLang">Multiple Languages</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p id="footerCopy">&copy; 2025 Smart Agriculture Assistant. Made for farmers, by farmers.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Emergency Modal -->
+    <div id="emergencyModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('emergencyModal')">&times;</span>
+            <h2 id="emergencyTitle">Emergency Agricultural Help</h2>
+            <div class="emergency-contacts">
+                <div class="contact-item">
+                    <h3 id="pestControl">Pest Control Emergency</h3>
+                    <p>📞 1800-425-1661</p>
+                </div>
+                <div class="contact-item">
+                    <h3 id="diseaseOutbreak">Disease Outbreak</h3>
+                    <p>📞 1800-180-1551</p>
+                </div>
+                <div class="contact-item">
+                    <h3 id="weatherAlert">Weather Alert</h3>
+                    <p>📞 1800-266-0123</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Expert Contact Modal -->
+    <div id="expertModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('expertModal')">&times;</span>
+            <h2 id="expertContactTitle">Contact Agricultural Expert</h2>
+            <form class="expert-form">
+                <input type="text" id="farmerName" placeholder="Your Name" required>
+                <input type="tel" id="farmerPhone" placeholder="Phone Number" required>
+                <select id="cropType" required>
+                    <option value="">Select Crop Type</option>
+                    <option value="tomato">Tomato</option>
+                    <option value="rice">Rice</option>
+                    <option value="wheat">Wheat</option>
+                    <option value="cotton">Cotton</option>
+                    <option value="sugarcane">Sugarcane</option>
+                </select>
+                <textarea id="issueDescription" placeholder="Describe your issue..." rows="4" required></textarea>
+                <button type="submit" class="submit-btn" id="submitExpert">Request Expert Call</button>
+            </form>
+        </div>
+    </div>
+    <script>
+  const fileInput = document.getElementById('fileInput');
+  const submitBtn = document.getElementById('submitBtn');
+
+  submitBtn.addEventListener('click', async () => {
+    const formData = new FormData();
+    formData.append('image', fileInput.files[0]);
+
+    try {
+      const response = await fetch('http://localhost:5001/detect', {
+        method: 'POST',
+        body: formData
+      });
+      const data = await response.json();
+      console.log(data); // response from backend
+    } catch (err) {
+      console.error('Error:', err);
+    }
+  });
+</script>
+
+
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="./script.js"></script>
+</body>
+
+</html>
