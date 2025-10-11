@@ -1,11 +1,11 @@
-// Use shared API_BASE if available, otherwise default to localhost
-const API_BASE = (typeof window !== 'undefined' && window.api && window.api.API_BASE) ? window.api.API_BASE : 'http://localhost:5001';
+// Use shared API_BASE if available, otherwise default to backend IP
+const API_BASE = (typeof window !== 'undefined' && window.api && window.api.API_BASE) ? window.api.API_BASE : 'http://10.98.15.239:5001';
 
 async function getRecommendedCrop(nitrogen, phosphorus) {
   try {
     const res = await fetch(`${API_BASE}/api/crop/recommend`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ nitrogen, phosphorus }),
     });
 

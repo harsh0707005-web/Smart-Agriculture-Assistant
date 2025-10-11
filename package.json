@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "vite --mode dev",
+    "dev": "vite --host --mode dev",
     "build": "vite build",
     "lint": "echo 'linted'"
   },

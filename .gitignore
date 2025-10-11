@@ -1,3 +1,11 @@
+# Environment variables (not used anymore - using config.js instead)
+.env
+.env.local
+.env.production
+
+# Configuration file (contains IPs - don't commit)
+# config.js
+
 # Logs
 logs
 *.log
@@ -22,3 +30,4 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+.vercel

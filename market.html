@@ -41,7 +41,7 @@
                             <span class="stat-change positive">+2.5%</span>
                         </div>
                         <div class="stat-item">
-                            <span class="stat-value">15</span>
+                            <span class="stat-value">50+</span>
                             <span class="stat-label">Active Markets</span>
                         </div>
                         <div class="stat-item">
@@ -69,11 +69,56 @@
                         </select>
                         <select id="marketSelect">
                             <option value="">Select Market</option>
-                            <option value="bangalore">Bangalore APMC</option>
-                            <option value="mysore">Mysore Mandi</option>
-                            <option value="hassan">Hassan Market</option>
-                            <option value="mandya">Mandya APMC</option>
-                            <option value="tumkur">Tumkur Mandi</option>
+                            <option value="akola">Akola</option>
+                            <option value="amaravati">Amaravati</option>
+                            <option value="arvi">Arvi</option>
+                            <option value="ashti">Ashti</option>
+                            <option value="badnera">Badnera</option>
+                            <option value="bangalore">Bangalore</option>
+                            <option value="barshi">Barshi</option>
+                            <option value="beed">Beed</option>
+                            <option value="belgaum">Belgaum</option>
+                            <option value="bhandara">Bhandara</option>
+                            <option value="bhusawal">Bhusawal</option>
+                            <option value="bidar">Bidar</option>
+                            <option value="chandrapur">Chandrapur</option>
+                            <option value="davangere">Davangere</option>
+                            <option value="dharashiv">Dharashiv</option>
+                            <option value="dhule">Dhule</option>
+                            <option value="gadchiroli">Gadchiroli</option>
+                            <option value="gondia">Gondia</option>
+                            <option value="gulbarga">Gulbarga</option>
+                            <option value="hassan">Hassan</option>
+                            <option value="hingoli">Hingoli</option>
+                            <option value="hubli">Hubli</option>
+                            <option value="jalgaon">Jalgaon</option>
+                            <option value="jalna">Jalna</option>
+                            <option value="kalyan">Kalyan</option>
+                            <option value="karanja">Karanja</option>
+                            <option value="kolhapur">Kolhapur</option>
+                            <option value="latur">Latur</option>
+                            <option value="mandya">Mandya</option>
+                            <option value="mangalore">Mangalore</option>
+                            <option value="mumbai">Mumbai</option>
+                            <option value="mysore">Mysore</option>
+                            <option value="nagpur">Nagpur</option>
+                            <option value="nanded">Nanded</option>
+                            <option value="nashik">Nashik</option>
+                            <option value="navi-mumbai">Navi Mumbai</option>
+                            <option value="parbhani">Parbhani</option>
+                            <option value="pune">Pune</option>
+                            <option value="raichur">Raichur</option>
+                            <option value="ratnagiri">Ratnagiri</option>
+                            <option value="sangli">Sangli</option>
+                            <option value="satara">Satara</option>
+                            <option value="shimoga">Shimoga</option>
+                            <option value="solapur">Solapur</option>
+                            <option value="thane">Thane</option>
+                            <option value="tumkur">Tumkur</option>
+                            <option value="udupi">Udupi</option>
+                            <option value="wardha">Wardha</option>
+                            <option value="washim">Washim</option>
+                            <option value="yavatmal">Yavatmal</option>
                         </select>
                         <button class="search-btn" onclick="searchPrices()">Search Prices</button>
                     </div>
@@ -359,37 +404,15 @@
     <script>
         // Market page specific functionality
         document.addEventListener('DOMContentLoaded', function() {
+            // Initialize language
+            if (typeof updateLanguage === 'function') {
+                updateLanguage();
+            }
+            
             loadLivePrices();
             initializePriceChart();
             initializeAlertForm();
         });
-
-        function loadLivePrices() {
-            const pricesGrid = document.getElementById('pricesGrid');
-            const marketPrices = getMarketPrices();
-            
-            let pricesHTML = '';
-            Object.entries(marketPrices).forEach(([crop, data]) => {
-                const changeClass = data.change > 0 ? 'up' : 'down';
-                const changeSymbol = data.change > 0 ? '+' : '';
-                
-                pricesHTML += `
-                    <div class="price-card">
-                        <div class="price-header">
-                            <span class="crop-name">${crop.charAt(0).toUpperCase() + crop.slice(1)}</span>
-                            <span class="price-change ${changeClass}">
-                                ${changeSymbol}${data.change}%
-                            </span>
-                        </div>
-                        <div class="current-price">₹${data.price}</div>
-                        <div class="market-info">${data.market}</div>
-                        <div class="market-info">Per Quintal</div>
-                    </div>
-                `;
-            });
-            
-            pricesGrid.innerHTML = pricesHTML;
-        }
 
         function searchPrices() {
             const crop = document.getElementById('cropSelect').value;
@@ -483,6 +506,36 @@
                 
                 alertForm.reset();
             });
+        }
+
+        // Load live prices from various markets
+        function loadLivePrices() {
+            const markets = [
+                { crop: 'Tomato', price: '₹2,850', change: '+5.2%', market: 'Bangalore', trend: 'up' },
+                { crop: 'Onion', price: '₹1,950', change: '-2.1%', market: 'Nashik', trend: 'down' },
+                { crop: 'Potato', price: '₹1,650', change: '+1.8%', market: 'Hassan', trend: 'up' },
+                { crop: 'Rice', price: '₹3,200', change: '+3.5%', market: 'Mandya', trend: 'up' },
+                { crop: 'Wheat', price: '₹2,450', change: '+0.5%', market: 'Tumkur', trend: 'up' },
+                { crop: 'Cotton', price: '₹6,800', change: '+4.2%', market: 'Nagpur', trend: 'up' },
+                { crop: 'Sugarcane', price: '₹3,100', change: '-1.5%', market: 'Kolhapur', trend: 'down' },
+                { crop: 'Maize', price: '₹1,850', change: '+2.3%', market: 'Davangere', trend: 'up' },
+                { crop: 'Groundnut', price: '₹5,200', change: '+6.1%', market: 'Dharwad', trend: 'up' },
+                { crop: 'Soybean', price: '₹4,350', change: '+3.8%', market: 'Latur', trend: 'up' },
+                { crop: 'Chilli', price: '₹8,900', change: '+7.2%', market: 'Solapur', trend: 'up' },
+                { crop: 'Turmeric', price: '₹7,650', change: '-0.8%', market: 'Sangli', trend: 'down' }
+            ];
+
+            const pricesGrid = document.getElementById('pricesGrid');
+            pricesGrid.innerHTML = markets.map(item => `
+                <div class="price-card">
+                    <div class="price-header">
+                        <span class="crop-name">${item.crop}</span>
+                        <span class="price-change ${item.trend}">${item.change}</span>
+                    </div>
+                    <div class="current-price">${item.price}</div>
+                    <div class="market-info">📍 ${item.market}</div>
+                </div>
+            `).join('');
         }
     </script>
 </body>

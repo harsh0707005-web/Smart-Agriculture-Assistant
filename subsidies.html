@@ -464,7 +464,8 @@
                     description: "Direct income support to farmers with cultivable land. Amount paid in three installments.",
                     category: "income",
                     eligibility: ["All farmers with land records", "Aadhaar linked bank account"],
-                    tags: ["Direct Transfer", "All Crops", "Annual"]
+                    tags: ["Direct Transfer", "All Crops", "Annual"],
+                    website: "https://pmkisan.gov.in/"
                 },
                 {
                     id: 2,
@@ -473,7 +474,8 @@
                     description: "Subsidy on certified seeds for major crops including rice, wheat, cotton, and vegetables.",
                     category: "seeds",
                     eligibility: ["Small and marginal farmers", "Land ownership proof"],
-                    tags: ["Seeds", "Quality Input", "Seasonal"]
+                    tags: ["Seeds", "Quality Input", "Seasonal"],
+                    website: "https://raitamitra.karnataka.gov.in/"
                 },
                 {
                     id: 3,
@@ -482,7 +484,8 @@
                     description: "Financial assistance for purchasing tractors, harvesters, and other farm equipment.",
                     category: "equipment",
                     eligibility: ["Farmers with minimum 2 acres", "No previous subsidy in 5 years"],
-                    tags: ["Machinery", "Tractors", "Equipment"]
+                    tags: ["Machinery", "Tractors", "Equipment"],
+                    website: "https://agrimachinery.nic.in/"
                 },
                 {
                     id: 4,
@@ -491,7 +494,8 @@
                     description: "Support for installing drip irrigation systems to promote water conservation.",
                     category: "irrigation",
                     eligibility: ["Farmers with bore well", "Minimum 1 acre land"],
-                    tags: ["Water Conservation", "Irrigation", "Technology"]
+                    tags: ["Water Conservation", "Irrigation", "Technology"],
+                    website: "https://pmksy.gov.in/"
                 },
                 {
                     id: 5,
@@ -500,7 +504,8 @@
                     description: "Comprehensive crop insurance covering yield losses due to natural calamities.",
                     category: "insurance",
                     eligibility: ["All farmers", "Crop loan account"],
-                    tags: ["Insurance", "Risk Coverage", "Natural Disasters"]
+                    tags: ["Insurance", "Risk Coverage", "Natural Disasters"],
+                    website: "https://pmfby.gov.in/"
                 },
                 {
                     id: 6,
@@ -508,8 +513,9 @@
                     amount: "₹50,000/ha",
                     description: "Financial support for adopting organic farming practices and certification.",
                     category: "organic",
-                    eligibility: ["Commitment to organic farming", "Group formation"],
-                    tags: ["Organic", "Sustainable", "Certification"]
+                    eligibility: ["Commitment to organic farmer", "Group formation"],
+                    tags: ["Organic", "Sustainable", "Certification"],
+                    website: "https://pgsindia-ncof.gov.in/"
                 }
             ]
         };
@@ -587,8 +593,13 @@
         }
 
         function applyForScheme(schemeId) {
-            alert('Redirecting to government portal for application...');
-            closeModal('schemeModal');
+            const scheme = schemes.all.find(s => s.id === schemeId);
+            if (scheme && scheme.website) {
+                window.open(scheme.website, '_blank');
+                closeModal('schemeModal');
+            } else {
+                alert('Website link not available for this scheme.');
+            }
         }
 
         function initializeEligibilityForm() {

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="C:\Users\DELL\Desktop\Gemini_Generated_Image_b2zp06b2zp06b2zp.png" type="image/png">
+    <link rel="icon" href="https://public-frontend-cos.metadl.com/mgx/img/favicon.png" type="image/png">
     <title>Smart Agriculture Assistant - ಸ್ಮಾರ್ಟ್ ಕೃಷಿ ಸಹಾಯಕ - स्मार्ट कृषि सहायक - स्मार्ट शेती सहाय्यक</title>
     <link rel="stylesheet" href="./style.css">
     <link rel="manifest" href="./manifest.json">
@@ -21,6 +21,12 @@
             <small>EN → KN → HI → MR</small>
         </div>
     </div>
+
+    <!-- AI Assistant Chat Button (Floating) -->
+    <button class="ai-chat-button" onclick="toggleAIChat()" id="aiChatBtn" title="AI Assistant">
+        <span class="chat-icon">🤖</span>
+        <span class="chat-pulse"></span>
+    </button>
 
     <!-- Header -->
     <header class="header">
@@ -92,12 +98,81 @@
                 </div>
 
                 <!-- Weather Information -->
-                <div class="feature-card" onclick="navigateTo('weather.html')">
+                <div class="feature-card" onclick="navigateTo('weather-demo.html')">
                     <div class="feature-icon">🌤️</div>
                     <h3 id="weatherTitle">Weather Forecast</h3>
-                    <p id="weatherDesc">Get accurate weather forecasts and farming advisories to plan your agricultural activities.</p>
+                    <p id="weatherDesc">Get accurate weather forecasts for multiple locations across Karnataka, Maharashtra, Tamil Nadu, Kerala, Andhra Pradesh & Telangana.</p>
                     <div class="feature-action">
                         <span id="weatherAction">View Weather →</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Agriculture News & Updates -->
+    <section class="agri-news">
+        <div class="container">
+            <h2 id="newsTitle">कृषि सुधार</h2>
+            <div class="news-grid">
+                <!-- Farming Tips Card -->
+                <div class="news-card">
+                    <div class="news-image">
+                        <img src="https://images.unsplash.com/photo-1625246333195-78d9c38ad449?w=400&h=300&fit=crop" alt="Farmer in field" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22300%22%3E%3Crect fill=%22%234CAF50%22 width=%22400%22 height=%22300%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 font-size=%2224%22 fill=%22white%22 text-anchor=%22middle%22 dy=%22.3em%22%3E🌾 Farming%3C/text%3E%3C/svg%3E'">
+                    </div>
+                    <div class="news-content">
+                        <div class="news-date">📅 नवीन 2022-23</div>
+                        <h3 id="newsCard1Title">कृषि सुधार</h3>
+                        <ul id="newsCard1List">
+                            <li>कृषि सुधार अभियान 2020 पर प्रकाशित लेखों का ई-संग्रह</li>
+                            <li>कृषि आदर्शमना निधि के तहत निधि पोषण सुविधा की केंद्रीय क्षेत्र योजना</li>
+                            <li>कृषि आदर्शमना निधि के तहत पात्र परियोजना के कार्य में स्थानीकरण</li>
+                        </ul>
+                        <button class="news-btn" onclick="navigateTo('subsidies.html')">
+                            <span id="newsBtn1">अधिक जानें →</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Farming Techniques Card -->
+                <div class="news-card">
+                    <div class="news-image">
+                        <img src="https://images.unsplash.com/photo-1574943320219-553eb213f72d?w=400&h=300&fit=crop" alt="Woman farmer" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22300%22%3E%3Crect fill=%22%234CAF50%22 width=%22400%22 height=%22300%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 font-size=%2224%22 fill=%22white%22 text-anchor=%22middle%22 dy=%22.3em%22%3E👩‍🌾 Farmer%3C/text%3E%3C/svg%3E'">
+                    </div>
+                    <div class="news-content">
+                        <div class="news-date">📅 अपडेट</div>
+                        <h3 id="newsCard2Title">कृषि समाजीता</h3>
+                        <ul id="newsCard2List">
+                            <li>मंडल कृषि कार्य केंद्र द्वारा भागों में कृषि पर संकट खेती सलाह</li>
+                            <li>किसान कल्याण</li>
+                            <li>किसानों के हितलाभ पर अनुसंधान के मामले विकासित करने पर सामूहिक ज्ञान</li>
+                            <li>द्वारा भागों में कृषि पर संकट कृषि कार्य</li>
+                        </ul>
+                        <button class="news-btn" onclick="navigateTo('diagnosis.html')">
+                            <span id="newsBtn2">अधिक जानें →</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Social Media Card -->
+                <div class="news-card">
+                    <div class="news-image social-media-bg">
+                        <div class="social-icon">📱</div>
+                    </div>
+                    <div class="news-content">
+                        <div class="news-date">🔗 सोशल मीडिया</div>
+                        <h3 id="newsCard3Title">सोशल मीडिया</h3>
+                        <ul id="newsCard3List">
+                            <li>Tweets by AgriGol</li>
+                            <li>Facebook Updates</li>
+                            <li>Instagram Stories</li>
+                            <li>YouTube Tutorials</li>
+                        </ul>
+                        <div class="social-links">
+                            <a href="#" class="social-link">📘 Facebook</a>
+                            <a href="#" class="social-link">🐦 Twitter</a>
+                            <a href="#" class="social-link">📸 Instagram</a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -120,6 +195,18 @@
                 <button class="quick-btn" onclick="showExpertContact()">
                     <span class="btn-icon">👨‍🌾</span>
                     <span id="expertBtn">Contact Expert</span>
+                </button>
+                <button class="quick-btn" onclick="navigateTo('nearby-stores.html')" style="background: #FF5722;">
+                    <span class="btn-icon">🏪</span>
+                    <span>Find Nearby Store</span>
+                </button>
+                <button class="quick-btn" onclick="navigateTo('test-crop.html')" style="background: #FF9800;">
+                    <span class="btn-icon">🧪</span>
+                    <span>Test API</span>
+                </button>
+                <button class="quick-btn" onclick="toggleAIChat()" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                    <span class="btn-icon">🤖</span>
+                    <span id="aiAssistantBtn">AI Assistant</span>
                 </button>
             </div>
         </div>
@@ -186,36 +273,85 @@
                     <option value="rice">Rice</option>
                     <option value="wheat">Wheat</option>
                     <option value="cotton">Cotton</option>
-                    <option value="sugarcane">Sugarcane</option>
                 </select>
                 <textarea id="issueDescription" placeholder="Describe your issue..." rows="4" required></textarea>
                 <button type="submit" class="submit-btn" id="submitExpert">Request Expert Call</button>
             </form>
         </div>
     </div>
-    <script>
-  const fileInput = document.getElementById('fileInput');
-  const submitBtn = document.getElementById('submitBtn');
 
-  submitBtn.addEventListener('click', async () => {
-    const formData = new FormData();
-    formData.append('image', fileInput.files[0]);
+    <!-- AI Assistant Chatbox -->
+    <div id="aiChatbox" class="ai-chatbox">
+        <div class="chat-header">
+            <div class="chat-header-left">
+                <span class="chat-avatar">🤖</span>
+                <div>
+                    <h3 id="chatTitle">AI Farm Assistant</h3>
+                    <span class="chat-status" id="chatStatus">Online</span>
+                </div>
+            </div>
+            <div class="chat-header-right">
+                <button class="chat-lang-btn" onclick="cycleChatLanguage()" id="chatLangBtn" title="Change Language">
+                    <span id="chatLangIcon">🌐</span>
+                </button>
+                <button class="chat-minimize-btn" onclick="toggleAIChat()" title="Close">
+                    <span>✕</span>
+                </button>
+            </div>
+        </div>
+        
+        <div class="chat-messages" id="chatMessages">
+            <div class="chat-message bot">
+                <div class="message-avatar">🤖</div>
+                <div class="message-content">
+                    <p id="welcomeMsg">Hello! I'm your AI farming assistant. How can I help you today?</p>
+                    <span class="message-time">Just now</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="chat-quick-questions">
+            <button class="quick-question" onclick="askQuestion('crop-disease')" id="quickQ1">
+                🌾 Crop Disease Help
+            </button>
+            <button class="quick-question" onclick="askQuestion('market-price')" id="quickQ2">
+                💰 Market Prices
+            </button>
+            <button class="quick-question" onclick="askQuestion('weather')" id="quickQ3">
+                🌤️ Weather Info
+            </button>
+            <button class="quick-question" onclick="askQuestion('fertilizer')" id="quickQ4">
+                🧪 Fertilizer Advice
+            </button>
+        </div>
+        
+        <div class="chat-input-area">
+            <button class="voice-btn" onclick="toggleVoiceInput()" id="voiceBtn" title="Voice Input">
+                <span id="voiceIcon">🎤</span>
+            </button>
+            <input type="text" 
+                   id="chatInput" 
+                   placeholder="Type your question..." 
+                   onkeypress="handleChatKeyPress(event)">
+            <button class="send-btn" onclick="sendMessage()" id="sendBtn">
+                <span>📤</span>
+            </button>
+        </div>
+        
+        <div class="voice-indicator" id="voiceIndicator" style="display: none;">
+            <div class="voice-animation">
+                <span class="voice-wave"></span>
+                <span class="voice-wave"></span>
+                <span class="voice-wave"></span>
+            </div>
+            <p id="voiceListening">Listening...</p>
+        </div>
+    </div>
 
-    try {
-      const response = await fetch('http://localhost:5001/detect', {
-        method: 'POST',
-        body: formData
-      });
-      const data = await response.json();
-      console.log(data); // response from backend
-    } catch (err) {
-      console.error('Error:', err);
-    }
-  });
-</script>
-
-
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="./script.js"></script>
+    <!-- Load configuration first -->
+    <script src="./config.js"></script>
+    <!-- Then load main script -->
+    <script src="./script.js"></script>
 </body>
 
 </html>

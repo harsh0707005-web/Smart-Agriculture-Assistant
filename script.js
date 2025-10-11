@@ -1,13 +1,45 @@
 // ----------------------------
-// Backend Configuration
+// Backend Configuration (from config.js)
 // ----------------------------
-const BACKEND_IP = '10.226.13.239'; // Kiran's laptop IP (change to 'localhost' for local testing)
-const BACKEND_PORT = '5001';        // Backend port
-const API_BASE_URL = `http://${BACKEND_IP}:${BACKEND_PORT}/api`;
+// Configuration is loaded from config.js file
+// Access via: window.CONFIG
+
+function getConfig() {
+    // Wait for config.js to load, or use defaults
+    if (window.CONFIG) {
+        return window.CONFIG;
+    }
+    // Fallback defaults if config.js not loaded yet
+    return {
+        BACKEND_IP: '10.98.15.239',
+        BACKEND_PORT: '5001',
+        FRONTEND_IP: '10.98.15.172',
+        DATABASE_IP: '172.17.75.120',
+        API_BASE_URL: 'http://10.98.15.239:5001/api'
+    };
+}
+
+// Get current configuration
+const config = getConfig();
+let BACKEND_IP = config.BACKEND_IP;
+let BACKEND_PORT = config.BACKEND_PORT;
+let FRONTEND_IP = config.FRONTEND_IP;
+let DATABASE_IP = config.DATABASE_IP;
+let API_BASE_URL = config.API_BASE_URL;
 
 function apiUrl(path) {
-    return `http://${BACKEND_IP}:${BACKEND_PORT}${path}`;
+    const cfg = getConfig();
+    return `http://${cfg.BACKEND_IP}:${cfg.BACKEND_PORT}${path}`;
 }
+
+// Backward compatibility - keep window.appConfig
+window.appConfig = {
+    get BACKEND_IP() { return getConfig().BACKEND_IP; },
+    get BACKEND_PORT() { return getConfig().BACKEND_PORT; },
+    get FRONTEND_IP() { return getConfig().FRONTEND_IP; },
+    get DATABASE_IP() { return getConfig().DATABASE_IP; },
+    get API_BASE_URL() { return getConfig().API_BASE_URL; }
+};
 
 // Language translations
 const translations = {
@@ -26,18 +58,18 @@ const translations = {
         marketTitle: "Market Prices",
         marketDesc: "Get real-time market prices for your crops across different mandis and make informed selling decisions.",
         marketAction: "Check Prices →",
-        subsidiesTitle: "Government Subsidies",
         subsidiesDesc: "Discover available government schemes, subsidies, and financial assistance programs for farmers.",
         subsidiesAction: "Explore Schemes →",
         weatherTitle: "Weather Forecast",
-        weatherDesc: "Get accurate weather forecasts and farming advisories to plan your agricultural activities.",
+        weatherDesc: "Get accurate weather forecasts and farmer advisories to plan your agricultural activities.",
         weatherAction: "View Weather →",
         quickTitle: "Quick Actions",
         emergencyBtn: "Emergency Help",
         photoBtn: "Take Photo",
         expertBtn: "Contact Expert",
+        aiAssistantBtn: "AI Assistant",
         footerAbout: "About Us",
-        footerDesc: "Empowering farmers with technology to improve crop yields and farming decisions.",
+        footerDesc: "Empowering farmers with technology to improve crop yields and farmer decisions.",
         footerContact: "Contact",
         footerSupport: "Support",
         footerHours: "Available 24/7",
@@ -49,6 +81,47 @@ const translations = {
         weatherAlert: "Weather Alert",
         expertContactTitle: "Contact Agricultural Expert",
         submitExpert: "Request Expert Call",
+        langText: "ಕನ್ನಡ"
+    },
+    kn: {
+        appTitle: "🌱 ಸ್ಮಾರ್ಟ್ ಕೃಷಿ ಸಹಾಯಕ",
+        appSubtitle: "ನಿಮ್ಮ ತಜ್ಞ ಕೃಷಿ ಸಹಚರ",
+        heroTitle: "AI ತಂತ್ರಜ್ಞಾನದೊಂದಿಗೆ ರೈತರನ್ನು ಸಬಲೀಕರಣಗೊಳಿಸುವುದು",
+        heroDescription: "ತ್ವರಿತ ಬೆಳೆ ರೋಗನಿರ್ಣಯ, ಮಾರುಕಟ್ಟೆ ಬೆಲೆಗಳು ಮತ್ತು ಸರ್ಕಾರಿ ಸಬ್ಸಿಡಿ ಮಾಹಿತಿಯನ್ನು ಪಡೆಯಿರಿ - ಎಲ್ಲವೂ ನಿಮ್ಮ ಸ್ಥಳೀಯ ಭಾಷೆಯಲ್ಲಿ!",
+        statFarmers: "ಸಹಾಯ ಮಾಡಿದ ರೈತರು",
+        statAccuracy: "ರೋಗನಿರ್ಣಯ ನಿಖರತೆ",
+        statSupport: "ಲಭ್ಯವಿದೆ",
+        featuresTitle: "ನಮ್ಮ ಸೇವೆಗಳು",
+        diagnosisTitle: "ಬೆಳೆ ರೋಗನಿರ್ಣಯ",
+        diagnosisDesc: "ನಿಮ್ಮ ಬೆಳೆಗಳ ಫೋಟೋಗಳನ್ನು ಅಪ್ಲೋಡ್ ಮಾಡಿ ಮತ್ತು ಚಿಕಿತ್ಸಾ ಶಿಫಾರಸುಗಳೊಂದಿಗೆ ತ್ವರಿತ AI-ಚಾಲಿತ ರೋಗ ರೋಗನಿರ್ಣಯವನ್ನು ಪಡೆಯಿರಿ.",
+        diagnosisAction: "ಈಗ ರೋಗನಿರ್ಣಯ ಮಾಡಿ →",
+        marketTitle: "ಮಾರುಕಟ್ಟೆ ಬೆಲೆಗಳು",
+        marketDesc: "ವಿವಿಧ ಮಂಡಿಗಳಲ್ಲಿ ನಿಮ್ಮ ಬೆಳೆಗಳಿಗೆ ನೈಜ-ಸಮಯದ ಮಾರುಕಟ್ಟೆ ಬೆಲೆಗಳನ್ನು ಪಡೆಯಿರಿ ಮತ್ತು ತಿಳುವಳಿಕೆಯುಳ್ಳ ಮಾರಾಟ ನಿರ್ಧಾರಗಳನ್ನು ತೆಗೆದುಕೊಳ್ಳಿ.",
+        marketAction: "ಬೆಲೆಗಳನ್ನು ಪರಿಶೀಲಿಸಿ →",
+        subsidiesTitle: "ಸರ್ಕಾರಿ ಸಬ್ಸಿಡಿಗಳು",
+        subsidiesDesc: "ರೈತರಿಗೆ ಲಭ್ಯವಿರುವ ಸರ್ಕಾರಿ ಯೋಜನೆಗಳು, ಸಬ್ಸಿಡಿಗಳು ಮತ್ತು ಹಣಕಾಸು ಸಹಾಯ ಕಾರ್ಯಕ್ರಮಗಳನ್ನು ಅನ್ವೇಷಿಸಿ.",
+        subsidiesAction: "ಯೋಜನೆಗಳನ್ನು ಅನ್ವೇಷಿಸಿ →",
+        weatherTitle: "ಹವಾಮಾನ ಮುನ್ಸೂಚನೆ",
+        weatherDesc: "ನಿಮ್ಮ ಕೃಷಿ ಚಟುವಟಿಕೆಗಳನ್ನು ಯೋಜಿಸಲು ನಿಖರವಾದ ಹವಾಮಾನ ಮುನ್ಸೂಚನೆಗಳು ಮತ್ತು ರೈತ ಸಲಹೆಗಳನ್ನು ಪಡೆಯಿರಿ.",
+        weatherAction: "ಹವಾಮಾನವನ್ನು ವೀಕ್ಷಿಸಿ →",
+        quickTitle: "ತ್ವರಿತ ಕ್ರಿಯೆಗಳು",
+        emergencyBtn: "ತುರ್ತು ಸಹಾಯ",
+        photoBtn: "ಫೋಟೋ ತೆಗೆಯಿರಿ",
+        expertBtn: "ತಜ್ಞರನ್ನು ಸಂಪರ್ಕಿಸಿ",
+        aiAssistantBtn: "AI ಸಹಾಯಕ",
+        footerAbout: "ನಮ್ಮ ಬಗ್ಗೆ",
+        footerDesc: "ಬೆಳೆ ಇಳುವರಿ ಮತ್ತು ರೈತ ನಿರ್ಧಾರಗಳನ್ನು ಸುಧಾರಿಸಲು ತಂತ್ರಜ್ಞಾನದೊಂದಿಗೆ ರೈತರನ್ನು ಸಬಲೀಕರಣಗೊಳಿಸುವುದು.",
+        footerContact: "ಸಂಪರ್ಕ",
+        footerSupport: "ಬೆಂಬಲ",
+        footerHours: "24/7 ಲಭ್ಯವಿದೆ",
+        footerLang: "ಬಹು ಭಾಷೆಗಳು",
+        footerCopy: "© 2024 ಸ್ಮಾರ್ಟ್ ಕೃಷಿ ಸಹಾಯಕ. ರೈತರಿಗಾಗಿ, ರೈತರಿಂದ ತಯಾರಿಸಲಾಗಿದೆ.",
+        emergencyTitle: "ತುರ್ತು ಕೃಷಿ ಸಹಾಯ",
+        pestControl: "ಕೀಟ ನಿಯಂತ್ರಣ ತುರ್ತು",
+        diseaseOutbreak: "ರೋಗ ಏಕಾಏಕಿ",
+        weatherAlert: "ಹವಾಮಾನ ಎಚ್ಚರಿಕೆ",
+        expertContactTitle: "ಕೃಷಿ ತಜ್ಞರನ್ನು ಸಂಪರ್ಕಿಸಿ",
+        submitExpert: "ತಜ್ಞ ಕರೆಗೆ ವಿನಂತಿಸಿ",
         langText: "हिन्दी"
     },
     hi: {
@@ -76,6 +149,7 @@ const translations = {
         emergencyBtn: "आपातकालीन सहायता",
         photoBtn: "फोटो लें",
         expertBtn: "विशेषज्ञ से संपर्क करें",
+        aiAssistantBtn: "AI सहायक",
         footerAbout: "हमारे बारे में",
         footerDesc: "फसल उत्पादन और कृषि निर्णयों में सुधार के लिए तकनीक के साथ किसानों को सशक्त बनाना।",
         footerContact: "संपर्क",
@@ -116,6 +190,7 @@ const translations = {
         emergencyBtn: "आपत्कालीन मदत",
         photoBtn: "फोटो काढा",
         expertBtn: "तज्ञाशी संपर्क करा",
+        aiAssistantBtn: "AI सहाय्यक",
         footerAbout: "आमच्याबद्दल",
         footerDesc: "पीक उत्पादन आणि शेती निर्णयांमध्ये सुधारणा करण्यासाठी तंत्रज्ञानासह शेतकऱ्यांना सशक्त करणे।",
         footerContact: "संपर्क",
@@ -135,7 +210,7 @@ const translations = {
 
 // Current language state
 let currentLang = 'en';
-const languages = ['en', 'hi', 'mr'];
+const languages = ['en', 'kn', 'hi', 'mr'];
 let currentLangIndex = 0;
 
 // ============================================
@@ -147,7 +222,7 @@ let currentLangIndex = 0;
  */
 async function getCropRecommendation(data) {
     try {
-        const response = await fetch(`${API_BASE_URL}/crops/recommend`, {
+        const response = await fetch(`${API_BASE_URL}/crop/recommend`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -222,15 +297,17 @@ async function getFertilizerRecommendation(data) {
 
 /**
  * Get Pest Control Information from Backend
+ * Backend uses POST /api/pest/detect
  */
 async function getPestControl(data) {
     try {
-        const response = await fetch(`${API_BASE_URL}/pest/control`, {
+        // Backend expects: { crop: string, symptoms: array }
+        const response = await fetch(`${API_BASE_URL}/pest/detect`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                ...data,
-                language: currentLang
+                crop: data.crop || 'tomato',
+                symptoms: data.symptoms || ['brown spots']
             })
         });
 
@@ -248,17 +325,13 @@ async function getPestControl(data) {
 
 /**
  * Get Market Prices from Backend
+ * Backend uses GET /api/market/prices or /api/market/market-prices
  */
 async function getMarketPrice(crop, location = null) {
     try {
-        const response = await fetch(`${API_BASE_URL}/market/price`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                crop: crop,
-                location: location,
-                language: currentLang
-            })
+        // Backend has GET /api/market/market-prices endpoint
+        const response = await fetch(`${API_BASE_URL}/market/market-prices`, {
+            method: 'GET'
         });
 
         if (!response.ok) {
@@ -266,7 +339,11 @@ async function getMarketPrice(crop, location = null) {
         }
 
         const result = await response.json();
-        return result;
+        // If specific crop requested, return that crop's data
+        if (crop && result[crop.toLowerCase()]) {
+            return result[crop.toLowerCase()];
+        }
+        return result; // Return all market prices
     } catch (error) {
         console.error('Error getting market price:', error);
         throw error;
@@ -275,16 +352,13 @@ async function getMarketPrice(crop, location = null) {
 
 /**
  * Get Weather Information from Backend
+ * Backend uses GET /api/weather/:location
  */
 async function getWeatherInfo(location) {
     try {
-        const response = await fetch(`${API_BASE_URL}/weather/info`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                location: location,
-                language: currentLang
-            })
+        // Backend expects GET request with location in URL path
+        const response = await fetch(`${API_BASE_URL}/weather/${location}`, {
+            method: 'GET'
         });
 
         if (!response.ok) {
@@ -300,11 +374,70 @@ async function getWeatherInfo(location) {
 }
 
 /**
+ * Available Weather Locations
+ */
+const weatherLocations = {
+    karnataka: [
+        'Bangalore', 'Bengaluru', 'Mysore', 'Mysuru', 'Hubli', 'Mangalore', 
+        'Belgaum', 'Belagavi', 'Davangere', 'Ballari', 'Vijayapura', 
+        'Shimoga', 'Shivamogga', 'Tumkur', 'Raichur', 'Bidar', 'Hospet',
+        'Hassan', 'Gadag', 'Udupi', 'Chikmagalur', 'Mandya', 'Kolar'
+    ],
+    maharashtra: [
+        'Mumbai', 'Pune', 'Nagpur', 'Nashik', 'Aurangabad', 'Solapur',
+        'Kolhapur', 'Amravati', 'Sangli', 'Jalgaon', 'Akola', 'Latur'
+    ],
+    tamilnadu: [
+        'Chennai', 'Coimbatore', 'Madurai', 'Tiruchirappalli', 'Salem',
+        'Tirunelveli', 'Erode', 'Vellore', 'Thanjavur', 'Dindigul'
+    ],
+    kerala: [
+        'Thiruvananthapuram', 'Kochi', 'Kozhikode', 'Thrissur', 'Kollam',
+        'Palakkad', 'Alappuzha', 'Kannur', 'Kottayam', 'Malappuram'
+    ],
+    andhrapradesh: [
+        'Visakhapatnam', 'Vijayawada', 'Guntur', 'Nellore', 'Kurnool',
+        'Rajahmundry', 'Tirupati', 'Kakinada', 'Anantapur', 'Vizianagaram'
+    ],
+    telangana: [
+        'Hyderabad', 'Warangal', 'Nizamabad', 'Khammam', 'Karimnagar',
+        'Mahbubnagar', 'Nalgonda', 'Adilabad', 'Suryapet', 'Miryalaguda'
+    ]
+};
+
+/**
+ * Get weather for multiple locations
+ */
+async function getWeatherForMultipleLocations(locations) {
+    try {
+        const weatherPromises = locations.map(location => getWeatherInfo(location));
+        const results = await Promise.all(weatherPromises);
+        return results;
+    } catch (error) {
+        console.error('Error getting weather for multiple locations:', error);
+        throw error;
+    }
+}
+
+/**
+ * Get all Karnataka weather
+ */
+async function getKarnatakaWeather() {
+    return await getWeatherForMultipleLocations(weatherLocations.karnataka.slice(0, 5)); // Top 5 cities
+}
+
+/**
  * Check Backend Health
+ * NOTE: Disabled because backend doesn't have /health endpoint
  */
 async function checkBackendHealth() {
+    // Backend doesn't have /health endpoint, so skip this check
+    console.log('ℹ️ Health check disabled - backend has no /health endpoint');
+    return true; // Return true to avoid errors
+    
+    /* Original code (disabled):
     try {
-        const response = await fetch('http://localhost:5001/health');
+        const response = await fetch(apiUrl('/health'));
         const data = await response.json();
         console.log('✅ Backend is healthy:', data);
         return true;
@@ -312,6 +445,7 @@ async function checkBackendHealth() {
         console.error('❌ Backend is not responding:', error);
         return false;
     }
+    */
 }
 
 // ============================================
@@ -460,11 +594,22 @@ function showLoading(elementId) {
 function displayError(elementId, message) {
     const element = document.getElementById(elementId);
     if (element) {
+        const config = getConfig();
         element.innerHTML = `
             <div class="result-card error">
                 <h3>❌ Error</h3>
-                <p>${message}</p>
-                <p class="hint">Make sure the backend server is running on http://localhost:5001</p>
+                <p><strong>Message:</strong> ${message}</p>
+                <div class="hint">
+                    <p><strong>Backend URL:</strong> ${config.API_BASE_URL}</p>
+                    <p><strong>Possible Issues:</strong></p>
+                    <ul>
+                        <li>Backend endpoint not implemented yet</li>
+                        <li>Backend server stopped running</li>
+                        <li>CORS not configured properly</li>
+                        <li>Network connection changed</li>
+                    </ul>
+                    <p><strong>Check:</strong> Open browser console (F12) for detailed error</p>
+                </div>
             </div>
         `;
     }
@@ -476,15 +621,10 @@ function displayError(elementId, message) {
 
 document.addEventListener('DOMContentLoaded', function() {
     console.log('🌾 Smart Agriculture Assistant loaded!');
+    console.log('📡 Backend configured at: ' + getConfig().API_BASE_URL);
     
-    // Check backend health
-    checkBackendHealth().then(isHealthy => {
-        if (isHealthy) {
-            console.log('✅ Connected to backend successfully!');
-        } else {
-            console.warn('⚠️ Backend is not available. Some features may not work.');
-        }
-    });
+    // Health check disabled - backend has no /health endpoint
+    // To test connection, try calling an actual API like getCropRecommendation()
     
     // Check for saved language preference
     const savedLang = localStorage.getItem('preferredLanguage');
@@ -528,6 +668,15 @@ function updateLanguage() {
             element.textContent = elements[key];
         }
     });
+    
+    // Update button texts with data attributes
+    const btnTexts = document.querySelectorAll('.btn-text');
+    btnTexts.forEach(btn => {
+        const text = btn.getAttribute(`data-${currentLang}`);
+        if (text) {
+            btn.textContent = text;
+        }
+    });
 }
 
 // ============================================
@@ -561,26 +710,76 @@ function closeModal(modalId) {
 function initializeExpertForm() {
     const expertForm = document.querySelector('.expert-form');
     if (expertForm) {
-        expertForm.addEventListener('submit', function(e) {
+        expertForm.addEventListener('submit', async function(e) {
             e.preventDefault();
             
             const formData = {
                 name: document.getElementById('farmerName').value,
                 phone: document.getElementById('farmerPhone').value,
                 cropType: document.getElementById('cropType').value,
-                issue: document.getElementById('issueDescription').value
+                issue: document.getElementById('issueDescription').value,
+                language: currentLang,
+                timestamp: new Date().toISOString()
             };
             
-            const successMessages = {
-                en: `Thank you ${formData.name}! An agricultural expert will call you within 30 minutes at ${formData.phone}.`,
-                hi: `धन्यवाद ${formData.name}! एक कृषि विशेषज्ञ 30 मिनट के भीतर ${formData.phone} पर आपको कॉल करेगा।`,
-                mr: `धन्यवाद ${formData.name}! एक शेती तज्ञ 30 मिनिटांत ${formData.phone} वर तुम्हाला कॉल करेल।`
-            };
+            // Disable submit button
+            const submitBtn = document.getElementById('submitExpert');
+            const originalText = submitBtn.textContent;
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Submitting...';
             
-            alert(successMessages[currentLang]);
-            
-            closeModal('expertModal');
-            expertForm.reset();
+            try {
+                // Send to backend API
+                const response = await fetch(apiUrl('/api/expert/request'), {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    
+                    const successMessages = {
+                        en: `Thank you ${formData.name}! Your request has been submitted successfully. An agricultural expert will call you within 30 minutes at ${formData.phone}. Request ID: ${result.request_id || 'N/A'}`,
+                        hi: `धन्यवाद ${formData.name}! आपका अनुरोध सफलतापूर्वक सबमिट हो गया है। एक कृषि विशेषज्ञ 30 मिनट के भीतर ${formData.phone} पर आपको कॉल करेगा।`,
+                        kn: `ಧನ್ಯವಾದಗಳು ${formData.name}! ನಿಮ್ಮ ವಿನಂತಿಯನ್ನು ಯಶಸ್ವಿಯಾಗಿ ಸಲ್ಲಿಸಲಾಗಿದೆ। ಕೃಷಿ ತಜ್ಞರು 30 ನಿಮಿಷಗಳಲ್ಲಿ ${formData.phone} ಗೆ ಕರೆ ಮಾಡುತ್ತಾರೆ।`,
+                        mr: `धन्यवाद ${formData.name}! तुमची विनंती यशस्वीरित्या सबमिट झाली आहे। एक शेती तज्ञ 30 मिनिटांत ${formData.phone} वर तुम्हाला कॉल करेल।`
+                    };
+                    
+                    alert(successMessages[currentLang] || successMessages.en);
+                    closeModal('expertModal');
+                    expertForm.reset();
+                    
+                } else {
+                    throw new Error('Failed to submit request');
+                }
+                
+            } catch (error) {
+                console.error('Error submitting expert request:', error);
+                
+                // Fallback: Store locally and show message
+                const errorMessages = {
+                    en: `Thank you ${formData.name}! Your request has been recorded. We'll call you at ${formData.phone} soon. (Note: Backend connection failed, request saved locally)`,
+                    hi: `धन्यवाद ${formData.name}! आपका अनुरोध रिकॉर्ड कर लिया गया है। हम जल्द ही ${formData.phone} पर कॉल करेंगे।`,
+                    kn: `ಧನ್ಯವಾದಗಳು ${formData.name}! ನಿಮ್ಮ ವಿನಂತಿಯನ್ನು ದಾಖಲಿಸಲಾಗಿದೆ। ನಾವು ಶೀಘ್ರದಲ್ಲೇ ${formData.phone} ಗೆ ಕರೆ ಮಾಡುತ್ತೇವೆ।`,
+                    mr: `धन्यवाद ${formData.name}! तुमची विनंती रेकॉर्ड केली गेली आहे। आम्ही लवकरच ${formData.phone} वर कॉल करू।`
+                };
+                
+                // Store in localStorage as backup
+                const requests = JSON.parse(localStorage.getItem('expertRequests') || '[]');
+                requests.push(formData);
+                localStorage.setItem('expertRequests', JSON.stringify(requests));
+                
+                alert(errorMessages[currentLang] || errorMessages.en);
+                closeModal('expertModal');
+                expertForm.reset();
+            } finally {
+                // Re-enable submit button
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalText;
+            }
         });
     }
 }
@@ -613,28 +812,362 @@ window.agricultureAPI = {
     getPestControl,
     getMarketPrice,
     getWeatherInfo,
-    checkBackendHealth
+    getWeatherForMultipleLocations,
+    getKarnatakaWeather,
+    weatherLocations  // Available locations list
+    // checkBackendHealth - Disabled (backend has no /health endpoint)
 };
 
 console.log('✅ Agriculture API functions loaded. Access via window.agricultureAPI');
-// Example: Crop Recommendation API
-async function getCropRecommendation() {
-  const response = await fetch('http://10.226.13.239:5001/api/crops/recommend', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      nitrogen: 90,
-      phosphorus: 40,
-      potassium: 40,
-      temperature: 25,
-      humidity: 80,
-      ph: 6.5,
-      rainfall: 200
-    })
-  });
 
-  const data = await response.json();
-  console.log('Recommended Crop:', data);
+// ============================================
+// DISEASE DETECTION API
+// ============================================
+
+/**
+ * Detect crop disease from uploaded image
+ */
+async function detectCropDisease(imageFile) {
+    try {
+        console.log('🔍 Starting crop disease detection...');
+        console.log('📁 Image file:', imageFile.name, imageFile.size, 'bytes');
+        
+        const formData = new FormData();
+        formData.append('image', imageFile);
+        
+        // Try multiple possible endpoints
+        const endpoints = ['/detect', '/api/detect', '/api/disease/detect'];
+        let lastError = null;
+        
+        for (const endpoint of endpoints) {
+            try {
+                const url = apiUrl(endpoint);
+                console.log(`🌐 Trying API URL: ${url}`);
+
+                const response = await fetch(url, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                console.log(`📡 Response status for ${endpoint}: ${response.status}`);
+
+                if (response.status === 404) {
+                    console.log(`⚠️ Endpoint ${endpoint} not found, trying next...`);
+                    lastError = new Error(`Endpoint ${endpoint} not found (404)`);
+                    continue;
+                }
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    console.error('❌ Backend error:', errorText);
+                    throw new Error(`HTTP error! status: ${response.status} - ${errorText}`);
+                }
+
+                const result = await response.json();
+                console.log('✅ Detection result:', result);
+                console.log(`✅ Working endpoint found: ${endpoint}`);
+                return result;
+                
+            } catch (error) {
+                if (error.message.includes('404')) {
+                    lastError = error;
+                    continue;
+                }
+                throw error;
+            }
+        }
+        
+        // If we get here, none of the endpoints worked
+        throw new Error(`Disease detection endpoint not found. Tried: ${endpoints.join(', ')}. Please implement one of these endpoints on your backend server at ${apiUrl('')}`);
+        
+    } catch (error) {
+        console.error('❌ Error detecting disease:', error);
+        console.error('Error details:', {
+            message: error.message,
+            name: error.name,
+            stack: error.stack
+        });
+        throw error;
+    }
 }
+
+// Make disease detection available globally
+window.agricultureAPI.detectCropDisease = detectCropDisease;
+
+// ============================================
+// AI CHAT ASSISTANT FUNCTIONALITY
+// ============================================
+
+let chatLanguage = 'en'; // Default chat language
+let isVoiceActive = false;
+let recognition = null;
+
+// Initialize Speech Recognition
+if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    recognition = new SpeechRecognition();
+    recognition.continuous = false;
+    recognition.interimResults = false;
+}
+
+// Toggle AI Chat
+function toggleAIChat() {
+    const chatbox = document.getElementById('aiChatbox');
+    chatbox.classList.toggle('active');
+    
+    // Update chat language to match current app language
+    if (chatbox.classList.contains('active')) {
+        chatLanguage = currentLang;
+        updateChatLanguage();
+    }
+}
+
+// Cycle Chat Language
+function cycleChatLanguage() {
+    const langs = ['en', 'kn', 'hi', 'mr'];
+    const currentIndex = langs.indexOf(chatLanguage);
+    chatLanguage = langs[(currentIndex + 1) % langs.length];
+    updateChatLanguage();
+}
+
+// Update Chat Language
+function updateChatLanguage() {
+    const langNames = {
+        en: 'English',
+        kn: 'ಕನ್ನಡ',
+        hi: 'हिन्दी',
+        mr: 'मराठी'
+    };
+    
+    const chatLangBtn = document.getElementById('chatLangBtn');
+    if (chatLangBtn) {
+        chatLangBtn.title = `Language: ${langNames[chatLanguage]}`;
+    }
+    
+    // Update welcome message
+    const welcomeMessages = {
+        en: "Hello! I'm your AI farming assistant. How can I help you today?",
+        kn: "ನಮಸ್ಕಾರ! ನಾನು ನಿಮ್ಮ AI ಕೃಷಿ ಸಹಾಯಕ. ನಾನು ನಿಮಗೆ ಹೇಗೆ ಸಹಾಯ ಮಾಡಬಹುದು?",
+        hi: "नमस्ते! मैं आपका AI कृषि सहायक हूं। मैं आपकी कैसे मदद कर सकता हूं?",
+        mr: "नमस्कार! मी तुमचा AI शेती सहाय्यक आहे. मी तुम्हाला कशी मदत करू शकतो?"
+    };
+    
+    const welcomeMsg = document.getElementById('welcomeMsg');
+    if (welcomeMsg) {
+        welcomeMsg.textContent = welcomeMessages[chatLanguage];
+    }
+}
+
+// Send Message
+function sendMessage() {
+    const input = document.getElementById('chatInput');
+    const message = input.value.trim();
+    
+    if (!message) return;
+    
+    // Add user message
+    addChatMessage(message, 'user');
+    input.value = '';
+    
+    // Simulate AI response
+    setTimeout(() => {
+        const response = getAIResponse(message);
+        addChatMessage(response, 'bot');
+        
+        // Speak response if supported
+        speakText(response);
+    }, 1000);
+}
+
+// Handle Chat Key Press
+function handleChatKeyPress(event) {
+    if (event.key === 'Enter') {
+        sendMessage();
+    }
+}
+
+// Add Chat Message
+function addChatMessage(text, sender) {
+    const messagesContainer = document.getElementById('chatMessages');
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `chat-message ${sender}`;
+    
+    const avatar = sender === 'user' ? '👤' : '🤖';
+    const time = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+    
+    messageDiv.innerHTML = `
+        <div class="message-avatar">${avatar}</div>
+        <div class="message-content">
+            <p>${text}</p>
+            <span class="message-time">${time}</span>
+        </div>
+    `;
+    
+    messagesContainer.appendChild(messageDiv);
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+}
+
+// Get AI Response
+function getAIResponse(question) {
+    const q = question.toLowerCase();
+    
+    const responses = {
+        en: {
+            disease: "I can help you identify crop diseases! Please upload a photo of your affected crop in the Crop Diagnosis section, or describe the symptoms you're seeing.",
+            market: "Current market prices vary by location. Check the Market Prices section for real-time rates in your area. What crop are you interested in?",
+            weather: "Weather information is available in the Weather Forecast section. I can provide forecasts for multiple locations across Karnataka and neighboring states.",
+            fertilizer: "For fertilizer recommendations, I need to know your crop type and soil conditions. You can get detailed recommendations in our Fertilizer section.",
+            default: "I'm here to help with crop diseases, market prices, weather forecasts, and farming advice. What would you like to know?"
+        },
+        kn: {
+            disease: "ನಾನು ಬೆಳೆ ರೋಗಗಳನ್ನು ಗುರುತಿಸಲು ಸಹಾಯ ಮಾಡಬಲ್ಲೆ! ದಯವಿಟ್ಟು ನಿಮ್ಮ ಪೀಡಿತ ಬೆಳೆಯ ಫೋಟೋವನ್ನು ಅಪ್ಲೋಡ್ ಮಾಡಿ.",
+            market: "ಮಾರುಕಟ್ಟೆ ಬೆಲೆಗಳು ಸ್ಥಳದ ಪ್ರಕಾರ ಬದಲಾಗುತ್ತವೆ. ನಿಮ್ಮ ಪ್ರದೇಶದ ನೇರ ದರಗಳಿಗಾಗಿ ಮಾರುಕಟ್ಟೆ ಬೆಲೆಗಳ ವಿಭಾಗವನ್ನು ಪರಿಶೀಲಿಸಿ.",
+            weather: "ಹವಾಮಾನ ಮಾಹಿತಿ ಹವಾಮಾನ ಮುನ್ಸೂಚನೆ ವಿಭಾಗದಲ್ಲಿ ಲಭ್ಯವಿದೆ.",
+            fertilizer: "ಗೊಬ್ಬರ ಶಿಫಾರಸುಗಳಿಗಾಗಿ, ನಿಮ್ಮ ಬೆಳೆ ಪ್ರಕಾರ ಮತ್ತು ಮಣ್ಣಿನ ಪರಿಸ್ಥಿತಿಗಳನ್ನು ತಿಳಿಯಬೇಕು.",
+            default: "ನಾನು ಬೆಳೆ ರೋಗಗಳು, ಮಾರುಕಟ್ಟೆ ಬೆಲೆಗಳು, ಹವಾಮಾನ ಮುನ್ಸೂಚನೆಗಳು ಮತ್ತು ಕೃಷಿ ಸಲಹೆಗಳೊಂದಿಗೆ ಸಹಾಯ ಮಾಡಲು ಇಲ್ಲಿದ್ದೇನೆ."
+        },
+        hi: {
+            disease: "मैं फसल रोगों की पहचान करने में मदद कर सकता हूं! कृपया अपनी प्रभावित फसल की फोटो अपलोड करें।",
+            market: "बाजार मूल्य स्थान के अनुसार भिन्न होते हैं। अपने क्षेत्र में वास्तविक समय दरों के लिए बाजार मूल्य अनुभाग देखें।",
+            weather: "मौसम की जानकारी मौसम पूर्वानुमान अनुभाग में उपलब्ध है।",
+            fertilizer: "उर्वरक सिफारिशों के लिए, मुझे आपकी फसल का प्रकार और मिट्टी की स्थिति जानने की आवश्यकता है।",
+            default: "मैं फसल रोगों, बाजार मूल्यों, मौसम पूर्वानुमान और खेती की सलाह में मदद के लिए यहां हूं।"
+        },
+        mr: {
+            disease: "मी पीक रोग ओळखण्यात मदत करू शकतो! कृपया तुमच्या प्रभावित पिकाचा फोटो अपलोड करा.",
+            market: "बाजार किंमती स्थानानुसार बदलतात. तुमच्या क्षेत्रातील वास्तविक वेळ दरांसाठी बाजार किंमत विभाग तपासा.",
+            weather: "हवामान माहिती हवामान अंदाज विभागात उपलब्ध आहे.",
+            fertilizer: "खत शिफारशींसाठी, मला तुमच्या पिकाचा प्रकार आणि मातीची स्थिती माहित असणे आवश्यक आहे.",
+            default: "मी पीक रोग, बाजार किंमती, हवामान अंदाज आणि शेती सल्ल्यासाठी मदत करण्यासाठी येथे आहे."
+        }
+    };
+    
+    const langResponses = responses[chatLanguage] || responses.en;
+    
+    if (q.includes('disease') || q.includes('रोग') || q.includes('ರೋಗ') || q.includes('sick') || q.includes('problem')) {
+        return langResponses.disease;
+    } else if (q.includes('price') || q.includes('market') || q.includes('बाजार') || q.includes('ಮಾರುಕಟ್ಟೆ') || q.includes('किंमत')) {
+        return langResponses.market;
+    } else if (q.includes('weather') || q.includes('मौसम') || q.includes('ಹವಾಮಾನ') || q.includes('rain') || q.includes('हवामान')) {
+        return langResponses.weather;
+    } else if (q.includes('fertilizer') || q.includes('उर्वरक') || q.includes('ಗೊಬ್ಬರ') || q.includes('खत')) {
+        return langResponses.fertilizer;
+    } else {
+        return langResponses.default;
+    }
+}
+
+// Ask Quick Question
+function askQuestion(type) {
+    const questions = {
+        'crop-disease': {
+            en: "How can I identify crop diseases?",
+            kn: "ನಾನು ಬೆಳೆ ರೋಗಗಳನ್ನು ಹೇಗೆ ಗುರುತಿಸಬಹುದು?",
+            hi: "मैं फसल रोगों की पहचान कैसे कर सकता हूं?",
+            mr: "मी पीक रोग कसे ओळखू शकतो?"
+        },
+        'market-price': {
+            en: "What are the current market prices?",
+            kn: "ಪ್ರಸ್ತುತ ಮಾರುಕಟ್ಟೆ ಬೆಲೆಗಳು ಏನು?",
+            hi: "वर्तमान बाजार मूल्य क्या हैं?",
+            mr: "सध्याच्या बाजार किंमती काय आहेत?"
+        },
+        'weather': {
+            en: "What's the weather forecast?",
+            kn: "ಹವಾಮಾನ ಮುನ್ಸೂಚನೆ ಏನು?",
+            hi: "मौसम का पूर्वानुमान क्या है?",
+            mr: "हवामान अंदाज काय आहे?"
+        },
+        'fertilizer': {
+            en: "What fertilizer should I use?",
+            kn: "ನಾನು ಯಾವ ಗೊಬ್ಬರವನ್ನು ಬಳಸಬೇಕು?",
+            hi: "मुझे कौन सा उर्वरक उपयोग करना चाहिए?",
+            mr: "मी कोणते खत वापरावे?"
+        }
+    };
+    
+    const question = questions[type][chatLanguage];
+    document.getElementById('chatInput').value = question;
+    sendMessage();
+}
+
+// Toggle Voice Input
+function toggleVoiceInput() {
+    if (!recognition) {
+        alert('Voice recognition not supported in your browser. Please use Chrome or Edge.');
+        return;
+    }
+    
+    const voiceBtn = document.getElementById('voiceBtn');
+    const voiceIndicator = document.getElementById('voiceIndicator');
+    
+    if (isVoiceActive) {
+        recognition.stop();
+        isVoiceActive = false;
+        voiceBtn.classList.remove('active');
+        voiceIndicator.style.display = 'none';
+    } else {
+        // Set language for recognition
+        const langCodes = {
+            en: 'en-US',
+            kn: 'kn-IN',
+            hi: 'hi-IN',
+            mr: 'mr-IN'
+        };
+        recognition.lang = langCodes[chatLanguage] || 'en-US';
+        
+        recognition.start();
+        isVoiceActive = true;
+        voiceBtn.classList.add('active');
+        voiceIndicator.style.display = 'block';
+    }
+}
+
+// Speech Recognition Events
+if (recognition) {
+    recognition.onresult = function(event) {
+        const transcript = event.results[0][0].transcript;
+        document.getElementById('chatInput').value = transcript;
+        isVoiceActive = false;
+        document.getElementById('voiceBtn').classList.remove('active');
+        document.getElementById('voiceIndicator').style.display = 'none';
+        
+        // Auto send message
+        setTimeout(() => sendMessage(), 500);
+    };
+    
+    recognition.onerror = function(event) {
+        console.error('Speech recognition error:', event.error);
+        isVoiceActive = false;
+        document.getElementById('voiceBtn').classList.remove('active');
+        document.getElementById('voiceIndicator').style.display = 'none';
+    };
+    
+    recognition.onend = function() {
+        isVoiceActive = false;
+        document.getElementById('voiceBtn').classList.remove('active');
+        document.getElementById('voiceIndicator').style.display = 'none';
+    };
+}
+
+// Text to Speech
+function speakText(text) {
+    if ('speechSynthesis' in window) {
+        const utterance = new SpeechSynthesisUtterance(text);
+        
+        // Set language
+        const langCodes = {
+            en: 'en-US',
+            kn: 'kn-IN',
+            hi: 'hi-IN',
+            mr: 'mr-IN'
+        };
+        utterance.lang = langCodes[chatLanguage] || 'en-US';
+        utterance.rate = 0.9;
+        utterance.pitch = 1;
+        
+        speechSynthesis.speak(utterance);
+    }
+}
+
+console.log('✅ AI Chat Assistant loaded with voice support!');

@@ -303,10 +303,16 @@
         }
     </style>
 
+    <script src="./config.js"></script>
     <script src="./script.js"></script>
     <script>
         // Diagnosis page specific functionality
         document.addEventListener('DOMContentLoaded', function() {
+            // Initialize language
+            if (typeof updateLanguage === 'function') {
+                updateLanguage();
+            }
+            
             const imageInput = document.getElementById('imageInput');
             const previewImg = document.getElementById('previewImg');
             const imagePreview = document.getElementById('imagePreview');
@@ -318,44 +324,53 @@
         });
 
         async function analyzeCrop() {
+            const imageInput = document.getElementById('imageInput');
             const loadingModal = document.getElementById('loadingModal');
             const resultsSection = document.getElementById('resultsSection');
             const resultsDiv = document.getElementById('diagnosisResults');
+            
+            // Check if image is selected
+            if (!imageInput.files || !imageInput.files[0]) {
+                alert('Please select an image first!');
+                return;
+            }
+            
+            const imageFile = imageInput.files[0];
             
             // Show loading modal
             loadingModal.style.display = 'block';
             
             try {
-                // Simulate AI analysis
-                const diagnosis = await simulateAIDiagnosis();
+                // Call backend API to detect disease
+                const diagnosis = await window.agricultureAPI.detectCropDisease(imageFile);
                 
                 // Hide loading modal
                 loadingModal.style.display = 'none';
                 
-                // Show results
+                // Show results from backend
                 resultsDiv.innerHTML = `
                     <div class="diagnosis-result">
-                        <h3>🎯 Detected Issue: ${diagnosis.disease}</h3>
+                        <h3>🎯 Detected Issue: ${diagnosis.disease || diagnosis.class || 'Unknown'}</h3>
                         <div class="confidence-section">
-                            <p><strong>Confidence Level: ${diagnosis.confidence}%</strong></p>
+                            <p><strong>Confidence Level: ${diagnosis.confidence ? (diagnosis.confidence * 100).toFixed(1) : '0'}%</strong></p>
                             <div class="confidence-bar">
-                                <div class="confidence-fill" style="width: ${diagnosis.confidence}%"></div>
+                                <div class="confidence-fill" style="width: ${diagnosis.confidence ? (diagnosis.confidence * 100) : 0}%"></div>
                             </div>
                         </div>
                         <div class="treatment-section">
                             <h4>💊 Recommended Treatment:</h4>
-                            <p>${diagnosis.treatment}</p>
+                            <p>${diagnosis.treatment || diagnosis.recommendation || 'Consult with an agricultural expert for specific treatment.'}</p>
                         </div>
                         <div class="prevention-section">
                             <h4>🛡️ Prevention Tips:</h4>
-                            <p>${diagnosis.prevention}</p>
+                            <p>${diagnosis.prevention || diagnosis.preventive_measures || 'Maintain proper crop spacing, use disease-resistant varieties, and practice crop rotation.'}</p>
                         </div>
                         <div class="action-buttons">
                             <button class="action-btn" onclick="contactExpert()">
-                                👨‍🌾 Contact Expert
+                                <span class="btn-text" data-en="👨‍🌾 Contact Expert" data-hi="👨‍🌾 विशेषज्ञ से संपर्क करें" data-mr="👨‍🌾 तज्ञांशी संपर्क साधा" data-kn="👨‍🌾 ತಜ್ಞರನ್ನು ಸಂಪರ್ಕಿಸಿ">👨‍🌾 Contact Expert</span>
                             </button>
                             <button class="action-btn" onclick="findNearbyStore()">
-                                🏪 Find Nearby Store
+                                <span class="btn-text" data-en="🏪 Find Nearby Store" data-hi="🏪 नजदीकी दुकान खोजें" data-mr="🏪 जवळचे दुकान शोधा" data-kn="🏪 ಹತ್ತಿರದ ಅಂಗಡಿ ಹುಡುಕಿ">🏪 Find Nearby Store</span>
                             </button>
                         </div>
                     </div>
@@ -366,16 +381,280 @@
                 
             } catch (error) {
                 loadingModal.style.display = 'none';
-                alert('Analysis failed. Please try again with a clearer image.');
+                console.error('Analysis error:', error);
+                
+                // Show detailed error in results section
+                resultsDiv.innerHTML = `
+                    <div class="diagnosis-result" style="border-left-color: #f44336; background: #fff3f3;">
+                        <h3>❌ Analysis Failed</h3>
+                        <p><strong>Error:</strong> ${error.message}</p>
+                        <div style="margin-top: 1rem; padding: 1rem; background: white; border-radius: 8px;">
+                            <h4>🔧 Troubleshooting Steps:</h4>
+                            <ol style="text-align: left; margin-left: 1rem;">
+                                <li><strong>Check Backend Server:</strong> Ensure backend is running on <code>http://10.98.15.239:5001</code></li>
+                                <li><strong>Test Backend:</strong> Open <code>http://10.98.15.239:5001/health</code> in browser</li>
+                                <li><strong>Check Endpoint:</strong> Verify <code>/detect</code> endpoint exists on backend</li>
+                                <li><strong>CORS Settings:</strong> Backend must allow requests from frontend</li>
+                                <li><strong>Image Format:</strong> Ensure image is JPG, PNG, or supported format</li>
+                                <li><strong>Network:</strong> Check if frontend can reach backend IP</li>
+                            </ol>
+                            <p style="margin-top: 1rem;"><strong>Console:</strong> Press F12 to see detailed error logs</p>
+                        </div>
+                    </div>
+                `;
+                resultsSection.style.display = 'block';
+                resultsSection.scrollIntoView({ behavior: 'smooth' });
             }
         }
 
-        function contactExpert() {
-            alert('Connecting you with agricultural expert...');
+        async function contactExpert() {
+            const modal = document.getElementById('loadingModal');
+            const loadingTitle = document.getElementById('loadingTitle');
+            const loadingDesc = document.getElementById('loadingDesc');
+            
+            const lang = currentLang || 'en';
+            const messages = {
+                en: {
+                    loading: 'Connecting to Expert...',
+                    loadingDesc: 'Finding the best agricultural expert for your issue.',
+                    assigned: 'Expert Assigned!',
+                    name: 'Name',
+                    specialization: 'Specialization',
+                    phone: 'Phone',
+                    email: 'Email',
+                    location: 'Location',
+                    availability: 'Availability',
+                    requestId: 'Request ID',
+                    estimatedResponse: 'Estimated Response',
+                    error: 'Failed to contact expert. Please try again or call helpline: 1800-180-1551'
+                },
+                hi: {
+                    loading: 'विशेषज्ञ से संपर्क कर रहे हैं...',
+                    loadingDesc: 'आपकी समस्या के लिए सर्वोत्तम कृषि विशेषज्ञ खोज रहे हैं।',
+                    assigned: 'विशेषज्ञ नियुक्त!',
+                    name: 'नाम',
+                    specialization: 'विशेषज्ञता',
+                    phone: 'फोन',
+                    email: 'ईमेल',
+                    location: 'स्थान',
+                    availability: 'उपलब्धता',
+                    requestId: 'अनुरोध आईडी',
+                    estimatedResponse: 'अनुमानित प्रतिक्रिया',
+                    error: 'विशेषज्ञ से संपर्क करने में विफल। कृपया पुनः प्रयास करें या हेल्पलाइन पर कॉल करें: 1800-180-1551'
+                },
+                mr: {
+                    loading: 'तज्ञांशी संपर्क साधत आहे...',
+                    loadingDesc: 'तुमच्या समस्येसाठी सर्वोत्तम कृषी तज्ञ शोधत आहे।',
+                    assigned: 'तज्ञ नियुक्त!',
+                    name: 'नाव',
+                    specialization: 'विशेषज्ञता',
+                    phone: 'फोन',
+                    email: 'ईमेल',
+                    location: 'स्थान',
+                    availability: 'उपलब्धता',
+                    requestId: 'विनंती आयडी',
+                    estimatedResponse: 'अंदाजे प्रतिसाद',
+                    error: 'तज्ञांशी संपर्क साधण्यात अयशस्वी. कृपया पुन्हा प्रयत्न करा किंवा हेल्पलाइनवर कॉल करा: 1800-180-1551'
+                },
+                kn: {
+                    loading: 'ತಜ್ಞರನ್ನು ಸಂಪರ್ಕಿಸಲಾಗುತ್ತಿದೆ...',
+                    loadingDesc: 'ನಿಮ್ಮ ಸಮಸ್ಯೆಗೆ ಉತ್ತಮ ಕೃಷಿ ತಜ್ಞರನ್ನು ಹುಡುಕುತ್ತಿದೆ.',
+                    assigned: 'ತಜ್ಞರನ್ನು ನಿಯೋಜಿಸಲಾಗಿದೆ!',
+                    name: 'ಹೆಸರು',
+                    specialization: 'ವಿಶೇಷತೆ',
+                    phone: 'ಫೋನ್',
+                    email: 'ಇಮೇಲ್',
+                    location: 'ಸ್ಥಳ',
+                    availability: 'ಲಭ್ಯತೆ',
+                    requestId: 'ವಿನಂತಿ ಐಡಿ',
+                    estimatedResponse: 'ಅಂದಾಜು ಪ್ರತಿಕ್ರಿಯೆ',
+                    error: 'ತಜ್ಞರನ್ನು ಸಂಪರ್ಕಿಸಲು ವಿಫಲವಾಗಿದೆ. ದಯವಿಟ್ಟು ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ ಅಥವಾ ಹೆಲ್ಪ್‌ಲೈನ್‌ಗೆ ಕರೆ ಮಾಡಿ: 1800-180-1551'
+                }
+            };
+            
+            const msg = messages[lang] || messages.en;
+            
+            loadingTitle.textContent = msg.loading;
+            loadingDesc.textContent = msg.loadingDesc;
+            modal.style.display = 'block';
+            
+            try {
+                const response = await fetch(`${CONFIG.API_BASE_URL}/expert/request`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        name: 'Farmer',
+                        phone: '+91 9876543210',
+                        cropType: 'general',
+                        issue: 'Crop disease consultation needed',
+                        language: lang,
+                        timestamp: new Date().toISOString()
+                    })
+                });
+                
+                if (!response.ok) throw new Error('Failed to contact expert');
+                
+                const data = await response.json();
+                modal.style.display = 'none';
+                
+                // Show expert details
+                if (data.success && data.expert_assigned) {
+                    alert(`${msg.assigned}\n\n${msg.name}: ${data.expert_assigned.name}\n${msg.specialization}: ${data.expert_assigned.specialization}\n${msg.phone}: ${data.expert_assigned.phone}\n\n${msg.requestId}: ${data.request_id}\n${msg.estimatedResponse}: ${data.estimated_callback_time}`);
+                } else {
+                    alert(`${msg.assigned}\n\n${msg.requestId}: ${data.request_id}\n${msg.estimatedResponse}: ${data.estimated_callback_time || '30 minutes'}`);
+                }
+                
+            } catch (error) {
+                modal.style.display = 'none';
+                console.error('Error contacting expert:', error);
+                // Fallback: Open expert contact modal instead
+                if (typeof showExpertContact === 'function') {
+                    showExpertContact();
+                } else {
+                    alert(msg.error);
+                }
+            }
         }
 
-        function findNearbyStore() {
-            alert('Finding nearby agricultural stores...');
+        async function findNearbyStore() {
+            const modal = document.getElementById('loadingModal');
+            const loadingTitle = document.getElementById('loadingTitle');
+            const loadingDesc = document.getElementById('loadingDesc');
+            
+            const lang = currentLang || 'en';
+            const messages = {
+                en: {
+                    loading: 'Finding Nearby Stores...',
+                    loadingDesc: 'Searching for agricultural stores in your area.',
+                    found: 'Found',
+                    storesNearby: 'Stores Nearby',
+                    type: 'Type',
+                    address: 'Address',
+                    phone: 'Phone',
+                    distance: 'Distance',
+                    rating: 'Rating',
+                    status: 'Status',
+                    openNow: 'Open Now',
+                    closed: 'Closed',
+                    services: 'Services',
+                    getDirections: 'Get Directions',
+                    error: 'Failed to find nearby stores. Please try again or search manually on Google Maps.'
+                },
+                hi: {
+                    loading: 'नजदीकी दुकानें खोज रहे हैं...',
+                    loadingDesc: 'आपके क्षेत्र में कृषि दुकानें खोज रहे हैं।',
+                    found: 'मिला',
+                    storesNearby: 'नजदीकी दुकानें',
+                    type: 'प्रकार',
+                    address: 'पता',
+                    phone: 'फोन',
+                    distance: 'दूरी',
+                    rating: 'रेटिंग',
+                    status: 'स्थिति',
+                    openNow: 'अभी खुला है',
+                    closed: 'बंद',
+                    services: 'सेवाएं',
+                    getDirections: 'दिशा-निर्देश प्राप्त करें',
+                    error: 'नजदीकी दुकानें खोजने में विफल। कृपया पुनः प्रयास करें या Google Maps पर मैन्युअल रूप से खोजें।'
+                },
+                mr: {
+                    loading: 'जवळची दुकाने शोधत आहे...',
+                    loadingDesc: 'तुमच्या क्षेत्रात कृषी दुकाने शोधत आहे.',
+                    found: 'सापडले',
+                    storesNearby: 'जवळची दुकाने',
+                    type: 'प्रकार',
+                    address: 'पत्ता',
+                    phone: 'फोन',
+                    distance: 'अंतर',
+                    rating: 'रेटिंग',
+                    status: 'स्थिती',
+                    openNow: 'आता उघडे आहे',
+                    closed: 'बंद',
+                    services: 'सेवा',
+                    getDirections: 'दिशानिर्देश मिळवा',
+                    error: 'जवळची दुकाने शोधण्यात अयशस्वी. कृपया पुन्हा प्रयत्न करा किंवा Google Maps वर मॅन्युअली शोधा.'
+                },
+                kn: {
+                    loading: 'ಹತ್ತಿರದ ಅಂಗಡಿಗಳನ್ನು ಹುಡುಕುತ್ತಿದೆ...',
+                    loadingDesc: 'ನಿಮ್ಮ ಪ್ರದೇಶದಲ್ಲಿ ಕೃಷಿ ಅಂಗಡಿಗಳನ್ನು ಹುಡುಕುತ್ತಿದೆ.',
+                    found: 'ಕಂಡುಬಂದಿದೆ',
+                    storesNearby: 'ಹತ್ತಿರದ ಅಂಗಡಿಗಳು',
+                    type: 'ಪ್ರಕಾರ',
+                    address: 'ವಿಳಾಸ',
+                    phone: 'ಫೋನ್',
+                    distance: 'ದೂರ',
+                    rating: 'ರೇಟಿಂಗ್',
+                    status: 'ಸ್ಥಿತಿ',
+                    openNow: 'ಈಗ ತೆರೆದಿದೆ',
+                    closed: 'ಮುಚ್ಚಲಾಗಿದೆ',
+                    services: 'ಸೇವೆಗಳು',
+                    getDirections: 'ನಿರ್ದೇಶನಗಳನ್ನು ಪಡೆಯಿರಿ',
+                    error: 'ಹತ್ತಿರದ ಅಂಗಡಿಗಳನ್ನು ಹುಡುಕಲು ವಿಫಲವಾಗಿದೆ. ದಯವಿಟ್ಟು ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ ಅಥವಾ Google Maps ನಲ್ಲಿ ಹಸ್ತಚಾಲಿತವಾಗಿ ಹುಡುಕಿ.'
+                }
+            };
+            
+            const msg = messages[lang] || messages.en;
+            
+            loadingTitle.textContent = msg.loading;
+            loadingDesc.textContent = msg.loadingDesc;
+            modal.style.display = 'block';
+            
+            try {
+                // Get user location or use default (Bangalore)
+                const defaultLocation = {
+                    latitude: 12.9716,
+                    longitude: 77.5946
+                };
+                
+                const response = await fetch(`${CONFIG.API_BASE_URL}/stores/nearby`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        latitude: defaultLocation.latitude,
+                        longitude: defaultLocation.longitude,
+                        radius: 10,
+                        store_type: 'all'
+                    })
+                });
+                
+                if (!response.ok) throw new Error('Failed to find stores');
+                
+                const data = await response.json();
+                modal.style.display = 'none';
+                
+                // Create stores display
+                let storesHTML = '<div style="max-height: 400px; overflow-y: auto;">';
+                storesHTML += `<h3>🏪 ${msg.found} ${data.count} ${msg.storesNearby}</h3>`;
+                
+                data.stores.forEach(store => {
+                    storesHTML += `
+                        <div style="border: 1px solid #ddd; padding: 15px; margin: 10px 0; border-radius: 8px; background: white;">
+                            <h4 style="margin: 0 0 10px 0; color: #2c5530;">${store.name}</h4>
+                            <p style="margin: 5px 0;"><strong>${msg.type}:</strong> ${store.type}</p>
+                            <p style="margin: 5px 0;"><strong>${msg.address}:</strong> ${store.address}</p>
+                            <p style="margin: 5px 0;"><strong>${msg.phone}:</strong> ${store.phone}</p>
+                            <p style="margin: 5px 0;"><strong>${msg.distance}:</strong> ${store.distance} km</p>
+                            ${store.rating ? `<p style="margin: 5px 0;"><strong>${msg.rating}:</strong> ${'⭐'.repeat(Math.floor(store.rating))} ${store.rating}</p>` : ''}
+                            ${store.is_open !== undefined ? `<p style="margin: 5px 0;"><strong>${msg.status}:</strong> ${store.is_open ? '🟢 ' + msg.openNow : '🔴 ' + msg.closed}</p>` : ''}
+                            ${store.products && store.products.length > 0 ? `<p style="margin: 5px 0;"><strong>${msg.services}:</strong> ${store.products.join(', ')}</p>` : ''}
+                            <a href="https://www.google.com/maps?q=${store.latitude},${store.longitude}" target="_blank" style="display: inline-block; margin-top: 10px; padding: 8px 15px; background: #4CAF50; color: white; text-decoration: none; border-radius: 5px;">📍 ${msg.getDirections}</a>
+                        </div>
+                    `;
+                });
+                
+                storesHTML += '</div>';
+                
+                // Show in results section
+                const resultsDiv = document.getElementById('diagnosisResults');
+                resultsDiv.innerHTML = storesHTML;
+                document.getElementById('resultsSection').style.display = 'block';
+                document.getElementById('resultsSection').scrollIntoView({ behavior: 'smooth' });
+                
+            } catch (error) {
+                modal.style.display = 'none';
+                console.error('Error finding stores:', error);
+                alert(msg.error);
+            }
         }
     </script>
 </body>
