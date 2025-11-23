@@ -81,7 +81,55 @@ const translations = {
         weatherAlert: "Weather Alert",
         expertContactTitle: "Contact Agricultural Expert",
         submitExpert: "Request Expert Call",
-        langText: "ಕನ್ನಡ"
+        langText: "ಕನ್ನಡ",
+        soilTitle: "Soil Analysis",
+        soilDesc: "Test your soil quality by analyzing pH levels and organic carbon content. Get personalized recommendations for better crop yields.",
+        soilAction: "Analyze Soil →",
+        pestTitle: "Pest Detection",
+        pestDesc: "Identify pests affecting your crops by reporting symptoms. Get instant treatment recommendations and control measures.",
+        pestAction: "Detect Pest →",
+        cropRecTitle: "Crop Recommendation",
+        cropRecDesc: "Get personalized crop suggestions based on your soil's nitrogen and phosphorus levels for optimal yields.",
+        cropRecAction: "Get Recommendation →",
+        fertilizerTitle: "Fertilizer Recommendation",
+        fertilizerDesc: "Find the right fertilizer for your crop based on current NPK levels in your soil.",
+        fertilizerAction: "Find Fertilizer →",
+        tipsTitle: "Farming Tips & Best Practices",
+        tipsCard1Title: "Best Planting Seasons",
+        tipsCard2Title: "Smart Irrigation Tips",
+        tipsCard3Title: "Pest & Disease Prevention",
+        // Diagnosis page
+        pageTitle: "🔬 Crop Diagnosis",
+        backBtn: "← Back",
+        uploadTitle: "Upload Crop Image for Analysis",
+        uploadDesc: "Take a clear photo of the affected plant or upload an existing image for AI-powered diagnosis.",
+        uploadText: "Click to upload or drag and drop image",
+        resultsTitle: "Diagnosis Results",
+        tipsTitle: "Photography Tips for Better Diagnosis",
+        tip1Title: "Good Lighting",
+        tip1Desc: "Take photos in natural daylight for best results. Avoid shadows and artificial lighting.",
+        tip2Title: "Focus on Problem",
+        tip2Desc: "Capture the affected area clearly. Include both healthy and diseased parts for comparison.",
+        tip3Title: "Proper Distance",
+        tip3Desc: "Maintain 6-12 inches distance from the plant. Ensure the image is not blurry.",
+        tip4Title: "Multiple Angles",
+        tip4Desc: "Take photos from different angles - top, side, and close-up of affected areas.",
+        commonTitle: "Common Crop Issues",
+        loadingTitle: "Analyzing Your Crop...",
+        loadingDesc: "Our AI is examining the image and comparing it with thousands of crop diseases.",
+        // New features
+        chatExpertTitle: "Chat with Expert",
+        chatExpertDesc: "Get instant answers to your farming questions from agricultural experts in real-time.",
+        chatExpertAction: "Start Chat →",
+        loanCalcTitle: "Loan Calculator",
+        loanCalcDesc: "Calculate agricultural loan EMI and explore government loan schemes for farmers.",
+        loanCalcAction: "Calculate EMI →",
+        yieldPredTitle: "Yield Prediction",
+        yieldPredDesc: "Predict your crop yield using AI based on soil, weather, and farming practices.",
+        yieldPredAction: "Predict Yield →",
+        trainingVideosTitle: "Training Videos",
+        trainingVideosDesc: "Learn modern farming techniques from expert-led video tutorials in multiple languages.",
+        trainingVideosAction: "Watch Videos →"
     },
     kn: {
         appTitle: "🌱 ಸ್ಮಾರ್ಟ್ ಕೃಷಿ ಸಹಾಯಕ",
@@ -122,7 +170,36 @@ const translations = {
         weatherAlert: "ಹವಾಮಾನ ಎಚ್ಚರಿಕೆ",
         expertContactTitle: "ಕೃಷಿ ತಜ್ಞರನ್ನು ಸಂಪರ್ಕಿಸಿ",
         submitExpert: "ತಜ್ಞ ಕರೆಗೆ ವಿನಂತಿಸಿ",
-        langText: "हिन्दी"
+        langText: "हिन्दी",
+        soilTitle: "ಮಣ್ಣಿನ ವಿಶ್ಲೇಷಣೆ",
+        soilDesc: "pH ಮಟ್ಟಗಳು ಮತ್ತು ಸಾವಯವ ಇಂಗಾಲದ ಅಂಶವನ್ನು ವಿಶ್ಲೇಷಿಸುವ ಮೂಲಕ ನಿಮ್ಮ ಮಣ್ಣಿನ ಗುಣಮಟ್ಟವನ್ನು ಪರೀಕ್ಷಿಸಿ. ಉತ್ತಮ ಬೆಳೆ ಇಳುವರಿಗಾಗಿ ವೈಯಕ್ತಿಕಗೊಳಿಸಿದ ಶಿಫಾರಸುಗಳನ್ನು ಪಡೆಯಿರಿ.",
+        soilAction: "ಮಣ್ಣನ್ನು ವಿಶ್ಲೇಷಿಸಿ →",
+        pestTitle: "ಕೀಟ ಪತ್ತೆ",
+        pestDesc: "ಲಕ್ಷಣಗಳನ್ನು ವರದಿ ಮಾಡುವ ಮೂಲಕ ನಿಮ್ಮ ಬೆಳೆಗಳ ಮೇಲೆ ಪರಿಣಾಮ ಬೀರುವ ಕೀಟಗಳನ್ನು ಗುರುತಿಸಿ. ತ್ವರಿತ ಚಿಕಿತ್ಸಾ ಶಿಫಾರಸುಗಳು ಮತ್ತು ನಿಯಂತ್ರಣ ಕ್ರಮಗಳನ್ನು ಪಡೆಯಿರಿ.",
+        pestAction: "ಕೀಟವನ್ನು ಪತ್ತೆ ಮಾಡಿ →",
+        cropRecTitle: "ಬೆಳೆ ಶಿಫಾರಸು",
+        cropRecDesc: "ಅತ್ಯುತ್ತಮ ಇಳುವರಿಗಾಗಿ ನಿಮ್ಮ ಮಣ್ಣಿನ ಸಾರಜನಕ ಮತ್ತು ರಂಜಕ ಮಟ್ಟಗಳ ಆಧಾರದ ಮೇಲೆ ವೈಯಕ್ತಿಕಗೊಳಿಸಿದ ಬೆಳೆ ಸಲಹೆಗಳನ್ನು ಪಡೆಯಿರಿ.",
+        cropRecAction: "ಶಿಫಾರಸು ಪಡೆಯಿರಿ →",
+        fertilizerTitle: "ರಸಗೊಬ್ಬರ ಶಿಫಾರಸು",
+        fertilizerDesc: "ನಿಮ್ಮ ಮಣ್ಣಿನಲ್ಲಿರುವ ಪ್ರಸ್ತುತ NPK ಮಟ್ಟಗಳ ಆಧಾರದ ಮೇಲೆ ನಿಮ್ಮ ಬೆಳೆಗೆ ಸರಿಯಾದ ರಸಗೊಬ್ಬರವನ್ನು ಹುಡುಕಿ.",
+        fertilizerAction: "ರಸಗೊಬ್ಬರವನ್ನು ಹುಡುಕಿ →",
+        tipsTitle: "ಕೃಷಿ ಸಲಹೆಗಳು ಮತ್ತು ಉತ್ತಮ ಅಭ್ಯಾಸಗಳು",
+        tipsCard1Title: "ಉತ್ತಮ ನೆಡುವ ಋತುಗಳು",
+        tipsCard2Title: "ಸ್ಮಾರ್ಟ್ ನೀರಾವರಿ ಸಲಹೆಗಳು",
+        tipsCard3Title: "ಕೀಟ ಮತ್ತು ರೋಗ ತಡೆಗಟ್ಟುವಿಕೆ",
+        // New features
+        chatExpertTitle: "ತಜ್ಞರೊಂದಿಗೆ ಚಾಟ್",
+        chatExpertDesc: "ಕೃಷಿ ತಜ್ಞರಿಂದ ನಿಮ್ಮ ಕೃಷಿ ಪ್ರಶ್ನೆಗಳಿಗೆ ತ್ವರಿತ ಉತ್ತರಗಳನ್ನು ಪಡೆಯಿರಿ.",
+        chatExpertAction: "ಚಾಟ್ ಪ್ರಾರಂಭಿಸಿ →",
+        loanCalcTitle: "ಸಾಲ ಕ್ಯಾಲ್ಕುಲೇಟರ್",
+        loanCalcDesc: "ಕೃಷಿ ಸಾಲ EMI ಲೆಕ್ಕಾಚಾರ ಮಾಡಿ ಮತ್ತು ರೈತರಿಗೆ ಸರ್ಕಾರಿ ಸಾಲ ಯೋಜನೆಗಳನ್ನು ಅನ್ವೇಷಿಸಿ.",
+        loanCalcAction: "EMI ಲೆಕ್ಕಾಚಾರ ಮಾಡಿ →",
+        yieldPredTitle: "ಇಳುವರಿ ಮುನ್ಸೂಚನೆ",
+        yieldPredDesc: "ಮಣ್ಣು, ಹವಾಮಾನ ಮತ್ತು ಕೃಷಿ ಪದ್ಧತಿಗಳ ಆಧಾರದ ಮೇಲೆ AI ಬಳಸಿ ನಿಮ್ಮ ಬೆಳೆ ಇಳುವರಿಯನ್ನು ಮುನ್ಸೂಚಿಸಿ.",
+        yieldPredAction: "ಇಳುವರಿ ಮುನ್ಸೂಚಿಸಿ →",
+        trainingVideosTitle: "ತರಬೇತಿ ವೀಡಿಯೊಗಳು",
+        trainingVideosDesc: "ಬಹು ಭಾಷೆಗಳಲ್ಲಿ ತಜ್ಞರ ನೇತೃತ್ವದ ವೀಡಿಯೊ ಟ್ಯುಟೋರಿಯಲ್‌ಗಳಿಂದ ಆಧುನಿಕ ಕೃಷಿ ತಂತ್ರಗಳನ್ನು ಕಲಿಯಿರಿ.",
+        trainingVideosAction: "ವೀಡಿಯೊಗಳನ್ನು ವೀಕ್ಷಿಸಿ →"
     },
     hi: {
         appTitle: "🌱 स्मार्ट कृषि सहायक",
@@ -163,7 +240,36 @@ const translations = {
         weatherAlert: "मौसम चेतावनी",
         expertContactTitle: "कृषि विशेषज्ञ से संपर्क करें",
         submitExpert: "विशेषज्ञ कॉल का अनुरोध करें",
-        langText: "मराठी"
+        langText: "मराठी",
+        soilTitle: "मिट्टी विश्लेषण",
+        soilDesc: "pH स्तर और जैविक कार्बन सामग्री का विश्लेषण करके अपनी मिट्टी की गुणवत्ता का परीक्षण करें। बेहतर फसल उपज के लिए व्यक्तिगत सिफारिशें प्राप्त करें।",
+        soilAction: "मिट्टी का विश्लेषण करें →",
+        pestTitle: "कीट पहचान",
+        pestDesc: "लक्षणों की रिपोर्ट करके अपनी फसलों को प्रभावित करने वाले कीटों की पहचान करें। तत्काल उपचार सिफारिशें और नियंत्रण उपाय प्राप्त करें।",
+        pestAction: "कीट का पता लगाएं →",
+        cropRecTitle: "फसल सिफारिश",
+        cropRecDesc: "इष्टतम उपज के लिए अपनी मिट्टी के नाइट्रोजन और फास्फोरस स्तरों के आधार पर व्यक्तिगत फसल सुझाव प्राप्त करें।",
+        cropRecAction: "सिफारिश प्राप्त करें →",
+        fertilizerTitle: "उर्वरक सिफारिश",
+        fertilizerDesc: "अपनी मिट्टी में मौजूद NPK स्तरों के आधार पर अपनी फसल के लिए सही उर्वरक खोजें।",
+        fertilizerAction: "उर्वरक खोजें →",
+        tipsTitle: "कृषि सुझाव और सर्वोत्तम प्रथाएं",
+        tipsCard1Title: "सर्वोत्तम रोपण मौसम",
+        tipsCard2Title: "स्मार्ट सिंचाई सुझाव",
+        tipsCard3Title: "कीट और रोग रोकथाम",
+        // New features
+        chatExpertTitle: "विशेषज्ञ से चैट करें",
+        chatExpertDesc: "कृषि विशेषज्ञों से अपने खेती के सवालों के तुरंत जवाब पाएं.",
+        chatExpertAction: "चैट शुरू करें →",
+        loanCalcTitle: "ऋण कैलकुलेटर",
+        loanCalcDesc: "कृषि ऋण EMI की गणना करें और किसानों के लिए सरकारी ऋण योजनाओं का पता लगाएं.",
+        loanCalcAction: "EMI गणना करें →",
+        yieldPredTitle: "उपज पूर्वानुमान",
+        yieldPredDesc: "मिट्टी, मौसम और खेती के तरीकों के आधार पर AI का उपयोग करके अपनी फसल की उपज का अनुमान लगाएं.",
+        yieldPredAction: "उपज का अनुमान लगाएं →",
+        trainingVideosTitle: "प्रशिक्षण वीडियो",
+        trainingVideosDesc: "कई भाषाओं में विशेषज्ञ-नेतृत्व वाले वीडियो ट्यूटोरियल से आधुनिक खेती तकनीक सीखें.",
+        trainingVideosAction: "वीडियो देखें →"
     },
     mr: {
         appTitle: "🌱 स्मार्ट शेती सहाय्यक",
@@ -204,7 +310,36 @@ const translations = {
         weatherAlert: "हवामान चेतावणी",
         expertContactTitle: "शेती तज्ञाशी संपर्क करा",
         submitExpert: "तज्ञ कॉलची विनंती करा",
-        langText: "English"
+        langText: "English",
+        soilTitle: "माती विश्लेषण",
+        soilDesc: "pH पातळी आणि सेंद्रिय कार्बन सामग्रीचे विश्लेषण करून आपल्या मातीच्या गुणवत्तेची चाचणी करा. चांगल्या पीक उत्पन्नासाठी वैयक्तिक शिफारसी मिळवा।",
+        soilAction: "माती विश्लेषण करा →",
+        pestTitle: "कीड ओळख",
+        pestDesc: "लक्षणांचा अहवाल देऊन आपल्या पिकांवर परिणाम करणाऱ्या कीटकांची ओळख करा. त्वरित उपचार शिफारसी आणि नियंत्रण उपाय मिळवा।",
+        pestAction: "कीड शोधा →",
+        cropRecTitle: "पीक शिफारस",
+        cropRecDesc: "इष्टतम उत्पन्नासाठी आपल्या मातीच्या नायट्रोजन आणि फॉस्फरस पातळीच्या आधारे वैयक्तिक पीक सूचना मिळवा।",
+        cropRecAction: "शिफारस मिळवा →",
+        fertilizerTitle: "खत शिफारस",
+        fertilizerDesc: "आपल्या मातीतील सध्याच्या NPK पातळीच्या आधारे आपल्या पिकासाठी योग्य खत शोधा।",
+        fertilizerAction: "खत शोधा →",
+        tipsTitle: "शेती टिपा आणि सर्वोत्तम पद्धती",
+        tipsCard1Title: "सर्वोत्तम लागवड हंगाम",
+        tipsCard2Title: "स्मार्ट सिंचन टिपा",
+        tipsCard3Title: "कीड आणि रोग प्रतिबंध",
+        // New features
+        chatExpertTitle: "तज्ञाशी चॅट करा",
+        chatExpertDesc: "शेती तज्ञांकडून आपल्या शेतीच्या प्रश्नांची त्वरित उत्तरे मिळवा.",
+        chatExpertAction: "चॅट सुरू करा →",
+        loanCalcTitle: "कर्ज कॅल्क्युलेटर",
+        loanCalcDesc: "कृषी कर्ज EMI ची गणना करा आणि शेतकऱ्यांसाठी सरकारी कर्ज योजना शोधा.",
+        loanCalcAction: "EMI गणना करा →",
+        yieldPredTitle: "उत्पन्न अंदाज",
+        yieldPredDesc: "माती, हवामान आणि शेती पद्धतींवर आधारित AI वापरून आपल्या पिकाच्या उत्पन्नाचा अंदाज लावा.",
+        yieldPredAction: "उत्पन्नाचा अंदाज लावा →",
+        trainingVideosTitle: "प्रशिक्षण व्हिडिओ",
+        trainingVideosDesc: "अनेक भाषांमध्ये तज्ञ-नेतृत्वाच्या व्हिडिओ ट्यूटोरियलमधून आधुनिक शेती तंत्र शिका.",
+        trainingVideosAction: "व्हिडिओ पहा →"
     }
 };
 
@@ -631,8 +766,14 @@ document.addEventListener('DOMContentLoaded', function() {
     if (savedLang && languages.includes(savedLang)) {
         currentLang = savedLang;
         currentLangIndex = languages.indexOf(currentLang);
-        updateLanguage();
+    } else {
+        // Set default language to English on first visit
+        currentLang = 'en';
+        currentLangIndex = 0;
+        localStorage.setItem('preferredLanguage', 'en');
     }
+    // Always update language on page load
+    updateLanguage();
     
     // Initialize expert form submission
     initializeExpertForm();
@@ -742,13 +883,13 @@ function initializeExpertForm() {
                     const result = await response.json();
                     
                     const successMessages = {
-                        en: `Thank you ${formData.name}! Your request has been submitted successfully. An agricultural expert will call you within 30 minutes at ${formData.phone}. Request ID: ${result.request_id || 'N/A'}`,
+                        en: `Thank you ${formData.name}! Your request has been submitted successfully. An agricultural expert will call you within 30 minutes at ${formData.phone}.`,
                         hi: `धन्यवाद ${formData.name}! आपका अनुरोध सफलतापूर्वक सबमिट हो गया है। एक कृषि विशेषज्ञ 30 मिनट के भीतर ${formData.phone} पर आपको कॉल करेगा।`,
                         kn: `ಧನ್ಯವಾದಗಳು ${formData.name}! ನಿಮ್ಮ ವಿನಂತಿಯನ್ನು ಯಶಸ್ವಿಯಾಗಿ ಸಲ್ಲಿಸಲಾಗಿದೆ। ಕೃಷಿ ತಜ್ಞರು 30 ನಿಮಿಷಗಳಲ್ಲಿ ${formData.phone} ಗೆ ಕರೆ ಮಾಡುತ್ತಾರೆ।`,
                         mr: `धन्यवाद ${formData.name}! तुमची विनंती यशस्वीरित्या सबमिट झाली आहे। एक शेती तज्ञ 30 मिनिटांत ${formData.phone} वर तुम्हाला कॉल करेल।`
                     };
                     
-                    alert(successMessages[currentLang] || successMessages.en);
+                    showToast(successMessages[currentLang] || successMessages.en);
                     closeModal('expertModal');
                     expertForm.reset();
                     
@@ -1171,3 +1312,76 @@ function speakText(text) {
 }
 
 console.log('✅ AI Chat Assistant loaded with voice support!');
+
+// ============================================
+// TOAST NOTIFICATION
+// ============================================
+
+function showToast(message, duration = 5000) {
+    const toast = document.getElementById('toast');
+    const toastMessage = document.getElementById('toastMessage');
+    
+    toastMessage.textContent = message;
+    toast.classList.add('show');
+    
+    // Auto hide after duration
+    setTimeout(() => {
+        toast.classList.remove('show');
+    }, duration);
+}
+
+console.log('✅ Toast notification system loaded!');
+
+// ============================================
+// DARK MODE TOGGLE
+// ============================================
+
+function toggleDarkMode() {
+    const body = document.body;
+    body.classList.toggle('dark-mode');
+    
+    // Save preference to localStorage
+    const isDarkMode = body.classList.contains('dark-mode');
+    localStorage.setItem('darkMode', isDarkMode ? 'enabled' : 'disabled');
+    
+    // Show toast notification
+    const messages = {
+        en: isDarkMode ? ' Dark mode enabled' : ' Light mode enabled',
+        hi: isDarkMode ? ' डार्क मोड सक्षम' : ' लाइट मोड सक्षम',
+        kn: isDarkMode ? ' ಡಾರ್ಕ್ ಮೋಡ್ ಸಕ್ರಿಯಗೊಳಿಸಲಾಗಿದೆ' : ' ಲೈಟ್ ಮೋಡ್ ಸಕ್ರಿಯಗೊಳಿಸಲಾಗಿದೆ',
+        mr: isDarkMode ? ' डार्क मोड सक्षम' : ' लाइट मोड सक्षम'
+    };
+    
+    showToast(messages[currentLang] || messages.en, 2000);
+}
+
+// Load dark mode preference on page load
+document.addEventListener('DOMContentLoaded', function() {
+    const darkMode = localStorage.getItem('darkMode');
+    if (darkMode === 'enabled') {
+        document.body.classList.add('dark-mode');
+    }
+});
+
+console.log('✅ Dark mode toggle loaded!');
+
+// ============================================
+// FAQ ACCORDION
+// ============================================
+
+function toggleFAQ(button) {
+    const faqItem = button.parentElement;
+    const isActive = faqItem.classList.contains('active');
+    
+    // Close all other FAQ items
+    document.querySelectorAll('.faq-item').forEach(item => {
+        item.classList.remove('active');
+    });
+    
+    // Toggle current item
+    if (!isActive) {
+        faqItem.classList.add('active');
+    }
+}
+
+console.log('✅ FAQ accordion loaded!');

@@ -1,5 +1,7 @@
 // Use shared API_BASE if available, otherwise default to backend IP
-const API_BASE = (typeof window !== 'undefined' && window.api && window.api.API_BASE) ? window.api.API_BASE : 'http://10.98.15.239:5001';
+const API_BASE = (typeof window !== 'undefined' && window.CONFIG) ? 
+  `http://${window.CONFIG.BACKEND_IP}:${window.CONFIG.BACKEND_PORT}` : 
+  'http://10.175.34.239:5001';
 
 async function getRecommendedCrop(nitrogen, phosphorus) {
   try {

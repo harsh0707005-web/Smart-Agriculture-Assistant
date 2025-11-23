@@ -1,6 +1,11 @@
+// Use shared API_BASE if available, otherwise default to backend IP
+const API_BASE = (typeof window !== 'undefined' && window.CONFIG) ? 
+  `http://${window.CONFIG.BACKEND_IP}:${window.CONFIG.BACKEND_PORT}` : 
+  'http://10.175.34.239:5001';
+
 async function getFertilizerRecommendation(crop, nitrogen, phosphorus, potassium) {
   try {
-    const res = await fetch("http://10.226.13.239:5001/api/fertilizer/recommend", {
+    const res = await fetch(`${API_BASE}/api/fertilizer/recommend`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ crop, nitrogen, phosphorus, potassium }),

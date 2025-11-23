@@ -5,12 +5,10 @@
 
 const CONFIG = {
     // Frontend machine IP
-    FRONTEND_IP: window.location.hostname === 'localhost' ? '10.175.34.172' : window.location.hostname,
+    FRONTEND_IP: '10.175.34.172',
     
     // Backend API (on backend laptop)
-    // For local development: use local IP
-    // For production: Replace 'localhost' with your deployed backend URL when ready
-    BACKEND_IP: window.location.hostname === 'localhost' ? '10.175.34.239' : '10.175.34.239',
+    BACKEND_IP: '10.175.34.239',  // Correct backend IP
     BACKEND_PORT: '5001',
     
     // Database server IP
@@ -19,7 +17,7 @@ const CONFIG = {
     DATABASE_NAME: 'smartAgri',
     
     // Environment mode
-    DEBUG: window.location.hostname === 'localhost'
+    DEBUG: true
 };
 
 // Computed values
