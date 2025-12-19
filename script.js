@@ -9,13 +9,17 @@ function getConfig() {
     if (window.CONFIG) {
         return window.CONFIG;
     }
+
+    // Auto-detect backend location
+    const hostname = window.location.hostname || 'localhost';
+
     // Fallback defaults if config.js not loaded yet
     return {
-        BACKEND_IP: '10.98.15.239',
+        BACKEND_IP: hostname,
         BACKEND_PORT: '5001',
-        FRONTEND_IP: '10.98.15.172',
-        DATABASE_IP: '172.17.75.120',
-        API_BASE_URL: 'http://10.98.15.239:5001/api'
+        FRONTEND_IP: hostname,
+        DATABASE_IP: '127.0.0.1', // Assuming local DB
+        API_BASE_URL: `http://${hostname}:5001/api`
     };
 }
 
@@ -39,6 +43,40 @@ window.appConfig = {
     get FRONTEND_IP() { return getConfig().FRONTEND_IP; },
     get DATABASE_IP() { return getConfig().DATABASE_IP; },
     get API_BASE_URL() { return getConfig().API_BASE_URL; }
+};
+
+// ----------------------------
+// Diagnosis API (used by diagnosis.html)
+// ----------------------------
+window.agricultureAPI = {
+    detectCropDisease: async function (imageFile) {
+        // In a real app, we would upload the image using FormData
+        // const formData = new FormData();
+        // formData.append('image', imageFile);
+
+        // For the demo backend which expects JSON or just triggers:
+        try {
+            const response = await fetch(apiUrl('/detect'), {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    filename: imageFile.name,
+                    size: imageFile.size
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error(`Server responded with ${response.status}`);
+            }
+
+            return await response.json();
+        } catch (error) {
+            console.error('Diagnosis error:', error);
+            throw error;
+        }
+    }
 };
 
 // Language translations
@@ -513,8 +551,8 @@ async function getWeatherInfo(location) {
  */
 const weatherLocations = {
     karnataka: [
-        'Bangalore', 'Bengaluru', 'Mysore', 'Mysuru', 'Hubli', 'Mangalore', 
-        'Belgaum', 'Belagavi', 'Davangere', 'Ballari', 'Vijayapura', 
+        'Bangalore', 'Bengaluru', 'Mysore', 'Mysuru', 'Hubli', 'Mangalore',
+        'Belgaum', 'Belagavi', 'Davangere', 'Ballari', 'Vijayapura',
         'Shimoga', 'Shivamogga', 'Tumkur', 'Raichur', 'Bidar', 'Hospet',
         'Hassan', 'Gadag', 'Udupi', 'Chikmagalur', 'Mandya', 'Kolar'
     ],
@@ -566,21 +604,19 @@ async function getKarnatakaWeather() {
  * NOTE: Disabled because backend doesn't have /health endpoint
  */
 async function checkBackendHealth() {
-    // Backend doesn't have /health endpoint, so skip this check
-    console.log('ℹ️ Health check disabled - backend has no /health endpoint');
-    return true; // Return true to avoid errors
-    
-    /* Original code (disabled):
     try {
+        // Backend health endpoint
         const response = await fetch(apiUrl('/health'));
+        if (!response.ok) throw new Error('Health check failed');
+
         const data = await response.json();
         console.log('✅ Backend is healthy:', data);
         return true;
     } catch (error) {
         console.error('❌ Backend is not responding:', error);
+        console.warn('⚠️ Make sure the backend server is running on port 5001');
         return false;
     }
-    */
 }
 
 // ============================================
@@ -592,7 +628,7 @@ async function checkBackendHealth() {
  */
 async function handleCropRecommendationForm(formData) {
     showLoading('resultContainer');
-    
+
     try {
         const result = await getCropRecommendation({
             nitrogen: parseFloat(formData.nitrogen),
@@ -615,7 +651,7 @@ async function handleCropRecommendationForm(formData) {
  */
 async function handleSoilAnalysisForm(formData) {
     showLoading('soilResultContainer');
-    
+
     try {
         const result = await getSoilAnalysis({
             nitrogen: parseFloat(formData.nitrogen),
@@ -637,15 +673,15 @@ async function handleSoilAnalysisForm(formData) {
 async function loadMarketPrices() {
     const crops = ['rice', 'wheat', 'cotton', 'onion', 'potato'];
     const pricesContainer = document.getElementById('marketPrices');
-    
+
     if (!pricesContainer) return;
-    
+
     showLoading('marketPrices');
-    
+
     try {
         const pricePromises = crops.map(crop => getMarketPrice(crop, 'Maharashtra'));
         const prices = await Promise.all(pricePromises);
-        
+
         displayMarketPrices(prices);
     } catch (error) {
         displayError('marketPrices', error.message);
@@ -659,7 +695,7 @@ async function loadMarketPrices() {
 function displayCropRecommendation(result) {
     const container = document.getElementById('resultContainer');
     if (!container) return;
-    
+
     container.innerHTML = `
         <div class="result-card success">
             <h3>🌾 ${currentLang === 'mr' ? 'शिफारस केलेली पिके' : currentLang === 'hi' ? 'अनुशंसित फसलें' : 'Recommended Crops'}</h3>
@@ -678,7 +714,7 @@ function displayCropRecommendation(result) {
 function displaySoilAnalysis(result) {
     const container = document.getElementById('soilResultContainer');
     if (!container) return;
-    
+
     container.innerHTML = `
         <div class="result-card success">
             <h3>🌍 ${currentLang === 'mr' ? 'माती आरोग्य' : currentLang === 'hi' ? 'मिट्टी स्वास्थ्य' : 'Soil Health'}: ${result.soil_health}</h3>
@@ -703,7 +739,7 @@ function displaySoilAnalysis(result) {
 function displayMarketPrices(prices) {
     const container = document.getElementById('marketPrices');
     if (!container) return;
-    
+
     container.innerHTML = prices.map(price => `
         <div class="price-card">
             <h4>${price.crop}</h4>
@@ -754,13 +790,13 @@ function displayError(elementId, message) {
 // INITIALIZATION
 // ============================================
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     console.log('🌾 Smart Agriculture Assistant loaded!');
     console.log('📡 Backend configured at: ' + getConfig().API_BASE_URL);
-    
-    // Health check disabled - backend has no /health endpoint
-    // To test connection, try calling an actual API like getCropRecommendation()
-    
+
+    // Check backend health
+    checkBackendHealth();
+
     // Check for saved language preference
     const savedLang = localStorage.getItem('preferredLanguage');
     if (savedLang && languages.includes(savedLang)) {
@@ -774,12 +810,12 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     // Always update language on page load
     updateLanguage();
-    
+
     // Initialize expert form submission
     initializeExpertForm();
-    
+
     // Add click outside modal to close
-    window.onclick = function(event) {
+    window.onclick = function (event) {
         const modals = document.querySelectorAll('.modal');
         modals.forEach(modal => {
             if (event.target === modal) {
@@ -802,14 +838,14 @@ function toggleLanguage() {
 
 function updateLanguage() {
     const elements = translations[currentLang];
-    
+
     Object.keys(elements).forEach(key => {
         const element = document.getElementById(key);
         if (element) {
             element.textContent = elements[key];
         }
     });
-    
+
     // Update button texts with data attributes
     const btnTexts = document.querySelectorAll('.btn-text');
     btnTexts.forEach(btn => {
@@ -851,9 +887,9 @@ function closeModal(modalId) {
 function initializeExpertForm() {
     const expertForm = document.querySelector('.expert-form');
     if (expertForm) {
-        expertForm.addEventListener('submit', async function(e) {
+        expertForm.addEventListener('submit', async function (e) {
             e.preventDefault();
-            
+
             const formData = {
                 name: document.getElementById('farmerName').value,
                 phone: document.getElementById('farmerPhone').value,
@@ -862,13 +898,13 @@ function initializeExpertForm() {
                 language: currentLang,
                 timestamp: new Date().toISOString()
             };
-            
+
             // Disable submit button
             const submitBtn = document.getElementById('submitExpert');
             const originalText = submitBtn.textContent;
             submitBtn.disabled = true;
             submitBtn.textContent = 'Submitting...';
-            
+
             try {
                 // Send to backend API
                 const response = await fetch(apiUrl('/api/expert/request'), {
@@ -878,28 +914,28 @@ function initializeExpertForm() {
                     },
                     body: JSON.stringify(formData)
                 });
-                
+
                 if (response.ok) {
                     const result = await response.json();
-                    
+
                     const successMessages = {
                         en: `Thank you ${formData.name}! Your request has been submitted successfully. An agricultural expert will call you within 30 minutes at ${formData.phone}.`,
                         hi: `धन्यवाद ${formData.name}! आपका अनुरोध सफलतापूर्वक सबमिट हो गया है। एक कृषि विशेषज्ञ 30 मिनट के भीतर ${formData.phone} पर आपको कॉल करेगा।`,
                         kn: `ಧನ್ಯವಾದಗಳು ${formData.name}! ನಿಮ್ಮ ವಿನಂತಿಯನ್ನು ಯಶಸ್ವಿಯಾಗಿ ಸಲ್ಲಿಸಲಾಗಿದೆ। ಕೃಷಿ ತಜ್ಞರು 30 ನಿಮಿಷಗಳಲ್ಲಿ ${formData.phone} ಗೆ ಕರೆ ಮಾಡುತ್ತಾರೆ।`,
                         mr: `धन्यवाद ${formData.name}! तुमची विनंती यशस्वीरित्या सबमिट झाली आहे। एक शेती तज्ञ 30 मिनिटांत ${formData.phone} वर तुम्हाला कॉल करेल।`
                     };
-                    
+
                     showToast(successMessages[currentLang] || successMessages.en);
                     closeModal('expertModal');
                     expertForm.reset();
-                    
+
                 } else {
                     throw new Error('Failed to submit request');
                 }
-                
+
             } catch (error) {
                 console.error('Error submitting expert request:', error);
-                
+
                 // Fallback: Store locally and show message
                 const errorMessages = {
                     en: `Thank you ${formData.name}! Your request has been recorded. We'll call you at ${formData.phone} soon. (Note: Backend connection failed, request saved locally)`,
@@ -907,12 +943,12 @@ function initializeExpertForm() {
                     kn: `ಧನ್ಯವಾದಗಳು ${formData.name}! ನಿಮ್ಮ ವಿನಂತಿಯನ್ನು ದಾಖಲಿಸಲಾಗಿದೆ। ನಾವು ಶೀಘ್ರದಲ್ಲೇ ${formData.phone} ಗೆ ಕರೆ ಮಾಡುತ್ತೇವೆ।`,
                     mr: `धन्यवाद ${formData.name}! तुमची विनंती रेकॉर्ड केली गेली आहे। आम्ही लवकरच ${formData.phone} वर कॉल करू।`
                 };
-                
+
                 // Store in localStorage as backup
                 const requests = JSON.parse(localStorage.getItem('expertRequests') || '[]');
                 requests.push(formData);
                 localStorage.setItem('expertRequests', JSON.stringify(requests));
-                
+
                 alert(errorMessages[currentLang] || errorMessages.en);
                 closeModal('expertModal');
                 expertForm.reset();
@@ -933,7 +969,7 @@ function handleImageUpload(inputElement, previewElement) {
     const file = inputElement.files[0];
     if (file) {
         const reader = new FileReader();
-        reader.onload = function(e) {
+        reader.onload = function (e) {
             previewElement.src = e.target.result;
             previewElement.style.display = 'block';
         };
@@ -972,14 +1008,14 @@ async function detectCropDisease(imageFile) {
     try {
         console.log('🔍 Starting crop disease detection...');
         console.log('📁 Image file:', imageFile.name, imageFile.size, 'bytes');
-        
+
         const formData = new FormData();
         formData.append('image', imageFile);
-        
+
         // Try multiple possible endpoints
         const endpoints = ['/detect', '/api/detect', '/api/disease/detect'];
         let lastError = null;
-        
+
         for (const endpoint of endpoints) {
             try {
                 const url = apiUrl(endpoint);
@@ -989,7 +1025,7 @@ async function detectCropDisease(imageFile) {
                     method: 'POST',
                     body: formData
                 });
-                
+
                 console.log(`📡 Response status for ${endpoint}: ${response.status}`);
 
                 if (response.status === 404) {
@@ -1008,7 +1044,7 @@ async function detectCropDisease(imageFile) {
                 console.log('✅ Detection result:', result);
                 console.log(`✅ Working endpoint found: ${endpoint}`);
                 return result;
-                
+
             } catch (error) {
                 if (error.message.includes('404')) {
                     lastError = error;
@@ -1017,10 +1053,10 @@ async function detectCropDisease(imageFile) {
                 throw error;
             }
         }
-        
+
         // If we get here, none of the endpoints worked
         throw new Error(`Disease detection endpoint not found. Tried: ${endpoints.join(', ')}. Please implement one of these endpoints on your backend server at ${apiUrl('')}`);
-        
+
     } catch (error) {
         console.error('❌ Error detecting disease:', error);
         console.error('Error details:', {
@@ -1055,7 +1091,7 @@ if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
 function toggleAIChat() {
     const chatbox = document.getElementById('aiChatbox');
     chatbox.classList.toggle('active');
-    
+
     // Update chat language to match current app language
     if (chatbox.classList.contains('active')) {
         chatLanguage = currentLang;
@@ -1079,12 +1115,12 @@ function updateChatLanguage() {
         hi: 'हिन्दी',
         mr: 'मराठी'
     };
-    
+
     const chatLangBtn = document.getElementById('chatLangBtn');
     if (chatLangBtn) {
         chatLangBtn.title = `Language: ${langNames[chatLanguage]}`;
     }
-    
+
     // Update welcome message
     const welcomeMessages = {
         en: "Hello! I'm your AI farming assistant. How can I help you today?",
@@ -1092,7 +1128,7 @@ function updateChatLanguage() {
         hi: "नमस्ते! मैं आपका AI कृषि सहायक हूं। मैं आपकी कैसे मदद कर सकता हूं?",
         mr: "नमस्कार! मी तुमचा AI शेती सहाय्यक आहे. मी तुम्हाला कशी मदत करू शकतो?"
     };
-    
+
     const welcomeMsg = document.getElementById('welcomeMsg');
     if (welcomeMsg) {
         welcomeMsg.textContent = welcomeMessages[chatLanguage];
@@ -1103,18 +1139,18 @@ function updateChatLanguage() {
 function sendMessage() {
     const input = document.getElementById('chatInput');
     const message = input.value.trim();
-    
+
     if (!message) return;
-    
+
     // Add user message
     addChatMessage(message, 'user');
     input.value = '';
-    
+
     // Simulate AI response
     setTimeout(() => {
         const response = getAIResponse(message);
         addChatMessage(response, 'bot');
-        
+
         // Speak response if supported
         speakText(response);
     }, 1000);
@@ -1132,10 +1168,10 @@ function addChatMessage(text, sender) {
     const messagesContainer = document.getElementById('chatMessages');
     const messageDiv = document.createElement('div');
     messageDiv.className = `chat-message ${sender}`;
-    
+
     const avatar = sender === 'user' ? '👤' : '🤖';
     const time = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
-    
+
     messageDiv.innerHTML = `
         <div class="message-avatar">${avatar}</div>
         <div class="message-content">
@@ -1143,7 +1179,7 @@ function addChatMessage(text, sender) {
             <span class="message-time">${time}</span>
         </div>
     `;
-    
+
     messagesContainer.appendChild(messageDiv);
     messagesContainer.scrollTop = messagesContainer.scrollHeight;
 }
@@ -1151,7 +1187,7 @@ function addChatMessage(text, sender) {
 // Get AI Response
 function getAIResponse(question) {
     const q = question.toLowerCase();
-    
+
     const responses = {
         en: {
             disease: "I can help you identify crop diseases! Please upload a photo of your affected crop in the Crop Diagnosis section, or describe the symptoms you're seeing.",
@@ -1182,9 +1218,9 @@ function getAIResponse(question) {
             default: "मी पीक रोग, बाजार किंमती, हवामान अंदाज आणि शेती सल्ल्यासाठी मदत करण्यासाठी येथे आहे."
         }
     };
-    
+
     const langResponses = responses[chatLanguage] || responses.en;
-    
+
     if (q.includes('disease') || q.includes('रोग') || q.includes('ರೋಗ') || q.includes('sick') || q.includes('problem')) {
         return langResponses.disease;
     } else if (q.includes('price') || q.includes('market') || q.includes('बाजार') || q.includes('ಮಾರುಕಟ್ಟೆ') || q.includes('किंमत')) {
@@ -1226,7 +1262,7 @@ function askQuestion(type) {
             mr: "मी कोणते खत वापरावे?"
         }
     };
-    
+
     const question = questions[type][chatLanguage];
     document.getElementById('chatInput').value = question;
     sendMessage();
@@ -1238,10 +1274,10 @@ function toggleVoiceInput() {
         alert('Voice recognition not supported in your browser. Please use Chrome or Edge.');
         return;
     }
-    
+
     const voiceBtn = document.getElementById('voiceBtn');
     const voiceIndicator = document.getElementById('voiceIndicator');
-    
+
     if (isVoiceActive) {
         recognition.stop();
         isVoiceActive = false;
@@ -1256,7 +1292,7 @@ function toggleVoiceInput() {
             mr: 'mr-IN'
         };
         recognition.lang = langCodes[chatLanguage] || 'en-US';
-        
+
         recognition.start();
         isVoiceActive = true;
         voiceBtn.classList.add('active');
@@ -1266,25 +1302,25 @@ function toggleVoiceInput() {
 
 // Speech Recognition Events
 if (recognition) {
-    recognition.onresult = function(event) {
+    recognition.onresult = function (event) {
         const transcript = event.results[0][0].transcript;
         document.getElementById('chatInput').value = transcript;
         isVoiceActive = false;
         document.getElementById('voiceBtn').classList.remove('active');
         document.getElementById('voiceIndicator').style.display = 'none';
-        
+
         // Auto send message
         setTimeout(() => sendMessage(), 500);
     };
-    
-    recognition.onerror = function(event) {
+
+    recognition.onerror = function (event) {
         console.error('Speech recognition error:', event.error);
         isVoiceActive = false;
         document.getElementById('voiceBtn').classList.remove('active');
         document.getElementById('voiceIndicator').style.display = 'none';
     };
-    
-    recognition.onend = function() {
+
+    recognition.onend = function () {
         isVoiceActive = false;
         document.getElementById('voiceBtn').classList.remove('active');
         document.getElementById('voiceIndicator').style.display = 'none';
@@ -1295,7 +1331,7 @@ if (recognition) {
 function speakText(text) {
     if ('speechSynthesis' in window) {
         const utterance = new SpeechSynthesisUtterance(text);
-        
+
         // Set language
         const langCodes = {
             en: 'en-US',
@@ -1306,7 +1342,7 @@ function speakText(text) {
         utterance.lang = langCodes[chatLanguage] || 'en-US';
         utterance.rate = 0.9;
         utterance.pitch = 1;
-        
+
         speechSynthesis.speak(utterance);
     }
 }
@@ -1320,10 +1356,10 @@ console.log('✅ AI Chat Assistant loaded with voice support!');
 function showToast(message, duration = 5000) {
     const toast = document.getElementById('toast');
     const toastMessage = document.getElementById('toastMessage');
-    
+
     toastMessage.textContent = message;
     toast.classList.add('show');
-    
+
     // Auto hide after duration
     setTimeout(() => {
         toast.classList.remove('show');
@@ -1339,11 +1375,11 @@ console.log('✅ Toast notification system loaded!');
 function toggleDarkMode() {
     const body = document.body;
     body.classList.toggle('dark-mode');
-    
+
     // Save preference to localStorage
     const isDarkMode = body.classList.contains('dark-mode');
     localStorage.setItem('darkMode', isDarkMode ? 'enabled' : 'disabled');
-    
+
     // Show toast notification
     const messages = {
         en: isDarkMode ? ' Dark mode enabled' : ' Light mode enabled',
@@ -1351,12 +1387,12 @@ function toggleDarkMode() {
         kn: isDarkMode ? ' ಡಾರ್ಕ್ ಮೋಡ್ ಸಕ್ರಿಯಗೊಳಿಸಲಾಗಿದೆ' : ' ಲೈಟ್ ಮೋಡ್ ಸಕ್ರಿಯಗೊಳಿಸಲಾಗಿದೆ',
         mr: isDarkMode ? ' डार्क मोड सक्षम' : ' लाइट मोड सक्षम'
     };
-    
+
     showToast(messages[currentLang] || messages.en, 2000);
 }
 
 // Load dark mode preference on page load
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const darkMode = localStorage.getItem('darkMode');
     if (darkMode === 'enabled') {
         document.body.classList.add('dark-mode');
@@ -1372,12 +1408,12 @@ console.log('✅ Dark mode toggle loaded!');
 function toggleFAQ(button) {
     const faqItem = button.parentElement;
     const isActive = faqItem.classList.contains('active');
-    
+
     // Close all other FAQ items
     document.querySelectorAll('.faq-item').forEach(item => {
         item.classList.remove('active');
     });
-    
+
     // Toggle current item
     if (!isActive) {
         faqItem.classList.add('active');

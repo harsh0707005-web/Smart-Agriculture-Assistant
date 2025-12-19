@@ -1,7 +1,7 @@
 // Use shared API_BASE if available, otherwise default to backend IP
-const API_BASE = (typeof window !== 'undefined' && window.CONFIG) ? 
-  `http://${window.CONFIG.BACKEND_IP}:${window.CONFIG.BACKEND_PORT}` : 
-  'http://10.98.15.239:5001';
+const API_BASE = (typeof window !== 'undefined' && window.CONFIG) ?
+  window.CONFIG.API_BASE_URL :
+  (typeof window !== 'undefined' ? `http://${window.location.hostname}:5001/api` : 'http://localhost:5001/api');
 
 async function analyzeSoil(ph, organicCarbon) {
   try {

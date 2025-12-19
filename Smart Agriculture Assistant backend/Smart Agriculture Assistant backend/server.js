@@ -36,6 +36,15 @@ app.use("/api/pest", pestRoutes);
 app.use("/api/soil", soilRoutes);
 app.use("/api/weather", weatherRoutes);
 
+// ❤️ Health Check Endpoint
+app.get("/api/health", (req, res) => {
+  res.json({
+    status: "ok",
+    message: "Backend is running",
+    timestamp: new Date().toISOString()
+  });
+});
+
 // 🔬 Disease Detection Endpoint (Image Upload)
 app.post("/detect", (req, res) => {
   try {
@@ -50,12 +59,12 @@ app.post("/detect", (req, res) => {
       symptoms: ["Dark spots with concentric rings", "Yellowing leaves", "Leaf drop"],
       affected_crops: ["Tomato", "Potato", "Pepper"]
     };
-    
+
     res.json(diseaseData);
   } catch (error) {
-    res.status(500).json({ 
-      error: "Internal server error", 
-      message: error.message 
+    res.status(500).json({
+      error: "Internal server error",
+      message: error.message
     });
   }
 });
